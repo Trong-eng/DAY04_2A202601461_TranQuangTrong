@@ -1,0 +1,130 @@
+# v1 - Research and source-inspection tool declarations.
+# Keep every tool name synchronized with tools/__init__.py and the corresponding
+# tools/<tool_name>/TOOL.md implementation before running chat or evaluation.
+tools:
+  - name: lookup
+    description: >-
+      Search the public web for sources related to a query. Use this when the
+      user needs discovery, current information, or a list of relevant links.
+      Do not use it when the user already supplied a URL and wants that page
+      read; use fetch instead.
+    parameters:
+      type: object
+      properties:
+        query:
+          type: string
+          description: A complete, specific web-search query.
+        topic:
+          type: string
+          enum: [general, news]
+          default: general
+          description: Use news for current events; otherwise use general.
+        timeframe:
+          type: string
+          enum: [day, week, month, year]
+          default: week
+          description: Time window for results when recency matters.
+        max_results:
+          type: integer
+          minimum: 1
+          maximum: 10
+          default: 5
+          description: Maximum number of search results to return.
+      required: [query]
+
+  - name: fetch
+    description: >-
+      Read and extract the main content of a specific public URL supplied by
+      the user or returned by lookup. Use it for page contents, not for finding
+      new URLs or evaluating source metadata.
+    parameters:
+      type: object
+      properties:
+        url:
+          type: string
+          description: A complete HTTP or HTTPS URL to read.
+      required: [url]
+
+  - name: format
+    description: >-
+      Convert an existing list of research items into a readable Markdown
+      digest. Use only after the necessary information has already been
+      collected and cleaned. This tool does not search, fetch, inspect, or
+      verify sources.
+    parameters:
+      type: object
+      properties:
+        items:
+          type: array
+          description: Research items that are ready to present.
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+              url:
+                type: string
+              source:
+                type: string
+              summary:
+                type: string
+              section:
+                type: string
+        template:
+          type: string
+          enum: [brief, sections, bullets, thread, daily_ai_vn]
+          default: sections
+          description: Output layout to apply to the supplied items.
+        headline:
+          type: string
+          default: ""
+          description: Optional heading for the digest.
+      required: [items, template]
+
+  - name: inspect_source
+    description: >-
+      Inspect provenance and technical metadata for one public URL, including
+      its final domain, HTTP status, HTTPS usage, title, author, publication
+      date, content type, quality signals, and warnings. Use this when the user
+      asks about source metadata or provenance. Do not claim that these signals
+      prove whether the source is factually true, and do not use this tool just
+      to read page content.
+    parameters:
+      type: object
+      properties:
+        url:
+          type: string
+          description: A complete HTTP or HTTPS URL to inspect.
+      required: [url]
+
+  - name: deduplicate_results
+    description: >-
+      Remove exact and near-duplicate research items by normalizing URLs and
+      comparing titles. Use this before format when a collected result list may
+      contain repeated sources. Do not use it to search for sources or summarize
+      their contents.
+    parameters:
+      type: object
+      properties:
+        items:
+          type: array
+          description: Search or research items to deduplicate.
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+              url:
+                type: string
+              source:
+                type: string
+              summary:
+                type: string
+            required: [title, url]
+        similarity_threshold:
+          type: number
+          minimum: 0
+          maximum: 1
+          default: 0.85
+          description: Title-similarity score at or above which items are duplicates.
+      required: [items]

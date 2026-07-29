@@ -1,130 +1,118 @@
-# v0 - Research and source-inspection tool declarations.
-# Keep every tool name synchronized with tools/__init__.py and the corresponding
-# tools/<tool_name>/TOOL.md implementation before running chat or evaluation.
+# starter_v0 — tool declarations (intentionally vague).
+# Names and descriptions here are a rough first draft. Routing rules, name->handle
+# mapping, arg conventions (news/timeframe/Top), and the send-confirmation boundary
+# are NOT spelled out anywhere yet. Your job is to make these declarations + the
+# system prompt good enough that the agent routes correctly on the eval.
+#
+# If you rename a tool, keep the name in sync across:
+#   this file  ->  tools/__init__.py (TOOL_FUNCTIONS)  ->  data/eval_base.json + data/eval_research_extension.json
 tools:
-  - name: lookup
-    description: >-
-      Search the public web for sources related to a query. Use this when the
-      user needs discovery, current information, or a list of relevant links.
-      Do not use it when the user already supplied a URL and wants that page
-      read; use fetch instead.
+  # ---------------- Core tools ----------------
+  - name: clarify
+    description: "Gửi một câu hỏi cho người dùng."
     parameters:
       type: object
       properties:
-        query:
-          type: string
-          description: A complete, specific web-search query.
-        topic:
-          type: string
-          enum: [general, news]
-          default: general
-          description: Use news for current events; otherwise use general.
-        timeframe:
-          type: string
-          enum: [day, week, month, year]
-          default: week
-          description: Time window for results when recency matters.
-        max_results:
-          type: integer
-          minimum: 1
-          maximum: 10
-          default: 5
-          description: Maximum number of search results to return.
+        question: {type: string, default: "", description: "Câu hỏi"}
+        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Kiểu trả lời"}
+        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn"}
+      required: [question]
+
+  - name: timeline
+    description: "Lấy các bài đăng gần đây."
+    parameters:
+      type: object
+      properties:
+        screenname: {type: string, default: "", description: "Tên tài khoản"}
+        limit: {type: integer, default: 5, description: "Số lượng"}
+      required: [screenname]
+
+  - name: social_search
+    description: "Tìm trên mạng xã hội."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Từ khóa"}
+        search_type: {type: string, enum: [Latest, Top], default: "Latest", description: "Cách sắp xếp"}
+        limit: {type: integer, default: 5, description: "Số lượng"}
+      required: [query]
+
+  - name: lookup
+    description: "Tra cứu thông tin trên internet."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Truy vấn"}
+        topic: {type: string, enum: [general, news], default: "general", description: "Phân loại"}
+        timeframe: {type: string, enum: [day, week, month, year], default: "week", description: "Khoảng thời gian"}
+        max_results: {type: integer, default: 5, description: "Số kết quả"}
       required: [query]
 
   - name: fetch
-    description: >-
-      Read and extract the main content of a specific public URL supplied by
-      the user or returned by lookup. Use it for page contents, not for finding
-      new URLs or evaluating source metadata.
+    description: "Lấy nội dung từ một địa chỉ."
     parameters:
       type: object
       properties:
-        url:
-          type: string
-          description: A complete HTTP or HTTPS URL to read.
+        url: {type: string, default: "", description: "Địa chỉ"}
       required: [url]
 
   - name: format
-    description: >-
-      Convert an existing list of research items into a readable Markdown
-      digest. Use only after the necessary information has already been
-      collected and cleaned. This tool does not search, fetch, inspect, or
-      verify sources.
+    description: "Trình bày dữ liệu đã có thành văn bản."
     parameters:
       type: object
       properties:
         items:
           type: array
-          description: Research items that are ready to present.
+          default: []
+          description: "Danh sách item"
           items:
             type: object
             properties:
-              title:
-                type: string
-              url:
-                type: string
-              source:
-                type: string
-              summary:
-                type: string
-              section:
-                type: string
-        template:
-          type: string
-          enum: [brief, sections, bullets, thread, daily_ai_vn]
-          default: sections
-          description: Output layout to apply to the supplied items.
-        headline:
-          type: string
-          default: ""
-          description: Optional heading for the digest.
+              title: {type: string}
+              url: {type: string}
+              source: {type: string}
+              summary: {type: string}
+              section: {type: string}
+        template: {type: string, enum: [brief, sections, bullets, thread, daily_ai_vn], default: "sections", description: "Khuôn"}
+        headline: {type: string, default: "", description: "Tiêu đề"}
       required: [items, template]
 
-  - name: inspect_source
-    description: >-
-      Inspect provenance and technical metadata for one public URL, including
-      its final domain, HTTP status, HTTPS usage, title, author, publication
-      date, content type, quality signals, and warnings. Use this when the user
-      asks about source metadata or provenance. Do not claim that these signals
-      prove whether the source is factually true, and do not use this tool just
-      to read page content.
+  # ---------------- Bonus tools ----------------
+  - name: send
+    description: "Gửi một đoạn văn bản đi."
     parameters:
       type: object
       properties:
-        url:
-          type: string
-          description: A complete HTTP or HTTPS URL to inspect.
-      required: [url]
+        text: {type: string, default: "", description: "Nội dung"}
+        confirmed: {type: boolean, default: false, description: "Cờ xác nhận"}
+      required: [text]
 
-  - name: deduplicate_results
-    description: >-
-      Remove exact and near-duplicate research items by normalizing URLs and
-      comparing titles. Use this before format when a collected result list may
-      contain repeated sources. Do not use it to search for sources or summarize
-      their contents.
+  - name: policy
+    description: "Tìm trong tài liệu nội bộ."
     parameters:
       type: object
       properties:
-        items:
-          type: array
-          description: Search or research items to deduplicate.
-          items:
-            type: object
-            properties:
-              title:
-                type: string
-              url:
-                type: string
-              source:
-                type: string
-              summary:
-                type: string
-            required: [title, url]
-        similarity_threshold:
-          type: number
-          minimum: 0
-          maximum: 1
-          default: 0.85
-          description: Title-similarity score at or above which items are duplicates.
-      required: [items]
+        query: {type: string, default: "", description: "Truy vấn"}
+        policy_area: {type: string, enum: [all, ai_research, source_citation, data_privacy, external_publishing, tool_usage], default: "all", description: "Nhóm"}
+        top_k: {type: integer, default: 3, description: "Số mục"}
+      required: [query]
+
+  - name: papers
+    description: "Tìm bài báo khoa học."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Từ khóa"}
+        max_results: {type: integer, default: 5, description: "Số lượng"}
+        sort_by: {type: string, enum: [relevance, lastUpdatedDate, submittedDate], default: "relevance", description: "Sắp xếp"}
+      required: [query]
+
+  - name: paper_text
+    description: "Lấy nội dung text của một bài báo."
+    parameters:
+      type: object
+      properties:
+        arxiv_url: {type: string, default: "", description: "ID hoặc địa chỉ"}
+        max_pages: {type: integer, default: 5, description: "Số trang"}
+        max_chars: {type: integer, default: 8000, description: "Số ký tự"}
+      required: [arxiv_url]
