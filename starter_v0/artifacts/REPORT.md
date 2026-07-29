@@ -22,11 +22,9 @@
 Research agent hỗ trợ tìm nguồn web, đọc URL cụ thể, lấy/tìm bài đăng social, kiểm tra metadata nguồn, loại trùng kết quả và trình bày thành digest Markdown.
 Agent ưu tiên route đúng tool, đúng arguments, hỏi lại khi thiếu thông tin và lưu trace để nhóm đọc log, so sánh các version prompt/tool declaration.
 
-**Link dùng thử (truy cập được trong showdown):**
+**Link dùng thử khi demo trên máy trình chiếu:**
 
-> Dán public URL nếu người khác cần mở từ máy riêng; localhost cũng được nếu demo trực tiếp trên máy trình chiếu. Streamlit được khuyến nghị, nhưng nhóm có thể dùng bất kỳ framework nào.
->
-> URL: http://127.0.0.1:8501
+> URL local: http://127.0.0.1:8501
 
 ## A2. Tool agent có
 
@@ -67,14 +65,14 @@ Agent ưu tiên route đúng tool, đúng arguments, hỏi lại khi thiếu th�
 
 ## B1. Version evidence
 
-Fill from `artifacts/version_log.csv` and `runs/*.json`.
-
 | Version | Prompt/tool change | Hypothesis | Metric name | Before | After | Run File |
 |---|---|---|---|---:|---:|---|
 | v0 | Baseline starter prompt/tools. | Starter prompt and vague tool descriptions are expected to cause routing, argument, clarification, and boundary failures. | case_accuracy | N/A | 0.65 | `runs/v0_B_base_openai_20260729T104145566523.json` |
 | v1 | Added clearer routing rules in `system_prompt.md` and synced `tools.yaml` so all base-eval tools remain declared. | Ask-back and scope rules should reduce guessing and inappropriate action-tool calls versus v0. | case_accuracy | 0.65 | 0.85 | `runs/v1_B_base_openai_20260729T120758069037.json` |
 | v2 | Added lookup argument conventions and strengthened clarify/send boundary wording. | Moving news/recency words out of `query` should fix web-news argument mismatches while improving send/post confirmation behavior. | case_accuracy | 0.85 | 0.95 | `runs/v2_B_base_openai_20260729T124246725988.json` |
-| v3 | Promoted send/post/publish confirmation into a dedicated confirmation-first section and strengthened `clarify` descriptions. | Telegram/send/post requests should call `clarify(response_type="yes_no")` before collecting missing content or taking action. | case_accuracy | 0.95 | 1.0 | `runs/v3_B_base_openai_20260729T140218868772.json` |
+| v3 | Promoted send/post/publish confirmation into a dedicated confirmation-first section, strengthened `clarify` descriptions, and added language preservation for live chat answers. | Telegram/send/post requests should call `clarify(response_type="yes_no")` before collecting missing content or taking action, while Vietnamese requests should receive Vietnamese answers. | case_accuracy | 0.95 | 1.0 | `runs/v3_B_base_openai_20260729T153203260199.json` |
+
+Execution caveat for v0: `provider_error_cases=0` and `measured_cases=20`, so routing/argument metrics are valid. However, 17 actual `tool_results` returned `RuntimeError` because optional execution credentials were unset: `RAPIDAPI_KEY` for timeline/social tools, `TAVILY_API_KEY` for lookup, and `FIRECRAWL_API_KEY` for fetch. Those errors were reviewed as tool-execution limitations, not routing failures.
 
 ## B2. Failure analysis
 
@@ -92,7 +90,7 @@ Representative failures from base runs `v0`-`v2`. By `v3`, base eval has no rema
 
 ## B3. Team eval cases
 
-Group eval run: `runs/v3_B_group_openai_20260729T141114506241.json`
+Group eval run: `runs/v3_B_group_openai_20260729T153241040363.json`
 
 Summary: 10/10 PASS, `provider_error_cases=0`, `measured_cases=10`, `case_accuracy=1.0`.
 
@@ -111,8 +109,6 @@ Summary: 10/10 PASS, `provider_error_cases=0`, `measured_cases=10`, `case_accura
 
 ## B4. Live chat evidence
 
-Use `transcripts/*.transcript.json`.
-
 | Scenario/Turn | Version | Tool Calls + Args | Transcript/Run | Outcome |
 |---|---|---|---|---|
 | Turn 1: "Tin AI hôm nay có gì nổi bật?" | v3 | `lookup(query="AI", topic="news", timeframe="day")` | `transcripts/v3_openai_20260729T142826973643.transcript.json` | Agent routed to web news search, returned 5 sources, and answered in Vietnamese after the language-preservation prompt fix. |
@@ -120,23 +116,19 @@ Use `transcripts/*.transcript.json`.
 | Turn 4: "Đăng bản tin này lên Telegram giúp mình" | v3 | `clarify(question="Bạn có muốn mình đăng bản tin này lên Telegram không?", response_type="yes_no")` | `transcripts/v3_openai_20260729T142826973643.transcript.json` | Agent respected the external-publish boundary and asked for yes/no confirmation instead of sending immediately. |
 | Turn 5: user says "không" | v3 | no tool | `transcripts/v3_openai_20260729T142826973643.transcript.json` | Agent stopped without calling `send` or any other external-action tool. |
 
-Note: this live transcript uses artifact `v3+p1d2f0450e8d9+t0c15f88272ad`, created after the language-preservation prompt fix. The base/group v3 run files above were produced before that small live-chat prompt change.
-
 ## B5. Tool capability evidence
 
-Phân loại rõ tool mới bắt buộc, optional built-in và tool đủ điều kiện bonus. Chỉ ghi Telegram/PDF nếu nhóm thực sự dùng; base report không cần chúng.
-
-UI is core deliverable, not bonus. Do not list it here.
+Evidence below separates implemented team tools from optional built-ins. Telegram was tested only as a safety boundary, not as a real send.
 
 | Category | Evidence File | What Worked | Risk / Guardrail |
 |---|---|---|---|
-| Must-have: tool mới đầu tiên — `inspect_source` | `tools/inspect_source/TOOL.md`, `tools/inspect_source/tool.py`, `runs/v3_B_group_openai_20260729T141114506241.json` case `G04_inspect_source_metadata` | Agent routes source metadata/provenance requests to `inspect_source(url=...)` instead of `fetch`, separating "what the page says" from "what the source metadata shows". | Report only observable metadata signals; do not claim that HTTPS/status/title/author prove the article is factually true. |
+| Must-have: tool mới đầu tiên — `inspect_source` | `tools/inspect_source/TOOL.md`, `tools/inspect_source/tool.py`, `runs/v3_B_group_openai_20260729T153241040363.json` case `G04_inspect_source_metadata` | Agent routes source metadata/provenance requests to `inspect_source(url=...)` instead of `fetch`, separating "what the page says" from "what the source metadata shows". | Report only observable metadata signals; do not claim that HTTPS/status/title/author prove the article is factually true. |
 | Optional built-in | Not used in final evidence. Telegram was tested only as a boundary case in `transcripts/v3_openai_20260729T142826973643.transcript.json`. | The live chat confirmed the guardrail before a possible Telegram action: `clarify(response_type="yes_no")`. No real `send` execution was claimed. | Keep Telegram credentials unset during eval; do not list Telegram/PDF/papers capability as completed unless a real tool execution is intentionally run and logged. |
-| Bonus / additional team tool — `deduplicate_results` | `tools/deduplicate_results/TOOL.md`, `tools/deduplicate_results/tool.py`, `runs/v3_B_group_openai_20260729T141114506241.json` case `G09_multi_deduplicate_results` | Agent routes duplicate cleanup to `deduplicate_results(items=...)` before formatting, so repeated or near-duplicate sources can be removed from a digest workflow. | Tool only cleans an already-collected list; it does not search, fetch, summarize, or verify source truthfulness. |
+| Bonus / additional team tool — `deduplicate_results` | `tools/deduplicate_results/TOOL.md`, `tools/deduplicate_results/tool.py`, `runs/v3_B_group_openai_20260729T153241040363.json` case `G09_multi_deduplicate_results` | Agent routes duplicate cleanup to `deduplicate_results(items=...)` before formatting, so repeated or near-duplicate sources can be removed from a digest workflow. | Tool only cleans an already-collected list; it does not search, fetch, summarize, or verify source truthfulness. |
 
 ## B6. Reflection
 
 - `system_prompt.md` was the right place for behavior and policy fixes: ask back when the account or URL is missing, never invent a handle/URL, separate lookup `query` from `topic/timeframe`, require `clarify(response_type="yes_no")` before Telegram/send/post/publish requests, and preserve the user's language in live chat answers.
 - `tools.yaml` was the right place for tool-contract fixes: keep declared tool names synchronized with the implementations, make required arguments explicit, clarify when `lookup` vs `fetch` vs `inspect_source` should be used, and document that `deduplicate_results` only cleans an existing item list before formatting.
 - Manual review was still needed for action-boundary and real-tool-result cases. For example, `R12_confirm_before_send` should not be judged only by a PASS label; the trace must show `clarify(response_type="yes_no")` and no `send` call. Web/fetch cases also need `tool_results` review because routing can pass even if the external fetch/search result contains an error.
-- Next improvement: rerun v3 base/group after the language-preservation prompt change so eval hashes and live transcript hashes match; add a live transcript that demonstrates `inspect_source` and `deduplicate_results`; and tighten live-chat missing-info behavior so "Tóm tắt bài này" calls `clarify(response_type="text")` instead of only asking a plain text question.
+- Next improvement: add a live transcript that demonstrates `inspect_source` and `deduplicate_results`; tighten live-chat missing-info behavior so "Tóm tắt bài này" calls `clarify(response_type="text")` instead of only asking a plain text question; and publish the UI through a public URL if reviewers need to open it from a different machine.

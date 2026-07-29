@@ -1,4 +1,4 @@
-# v2 - Research and source-inspection tool declarations.
+# v1 - Research and source-inspection tool declarations.
 # Keep every tool name synchronized with tools/__init__.py and the corresponding
 # tools/<tool_name>/TOOL.md implementation before running chat or evaluation.
 tools:
@@ -7,7 +7,9 @@ tools:
       Ask the user for missing information or confirmation. Use this when a
       request cannot be completed safely because a required account, URL, or
       yes/no confirmation is missing. Do not use it when the user already
-      supplied enough information to choose another tool.
+      supplied enough information to choose another tool. For send, post,
+      publish, or external-delivery requests, confirmation has priority: use
+      response_type=yes_no even if the content is referred to indirectly.
     parameters:
       type: object
       properties:
@@ -78,9 +80,6 @@ tools:
     description: >-
       Search the public web for sources related to a query. Use this when the
       user needs discovery, current information, or a list of relevant links.
-      Put only the subject keywords in query; express current-event and recency
-      intent with topic and timeframe. Exclude request, channel, and recency
-      words unless the user explicitly provides an exact query to preserve.
       Do not use it when the user already supplied a URL and wants that page
       read; use fetch instead.
     parameters:
@@ -88,9 +87,7 @@ tools:
       properties:
         query:
           type: string
-          description: >-
-            Subject keywords only. Exclude request, channel, and recency words
-            unless the user explicitly provides an exact query to preserve verbatim.
+          description: The core subject to search for. Do not include words that belong in topic or timeframe, such as news/tin/tin tức/hôm nay/tuần này.
         topic:
           type: string
           enum: [general, news]

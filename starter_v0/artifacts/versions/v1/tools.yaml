@@ -2,6 +2,78 @@
 # Keep every tool name synchronized with tools/__init__.py and the corresponding
 # tools/<tool_name>/TOOL.md implementation before running chat or evaluation.
 tools:
+  - name: clarify
+    description: >-
+      Ask the user for missing information or confirmation. Use this when a
+      request cannot be completed safely because a required account, URL, or
+      yes/no confirmation is missing. Do not use it when the user already
+      supplied enough information to choose another tool.
+    parameters:
+      type: object
+      properties:
+        question:
+          type: string
+          default: ""
+          description: The question to ask the user.
+        response_type:
+          type: string
+          enum: [text, yes_no, choice]
+          default: text
+          description: Expected response shape from the user.
+        options:
+          type: array
+          default: []
+          items:
+            type: string
+          description: Options to show when response_type is choice.
+      required: [question]
+
+  - name: timeline
+    description: >-
+      Get recent posts from one specific social account. Use this when the user
+      asks for tweets/posts from a named person, organization, or handle. The
+      screenname argument should be the account handle without @ when known.
+      Do not use it for searching posts by topic; use social_search instead.
+    parameters:
+      type: object
+      properties:
+        screenname:
+          type: string
+          default: ""
+          description: Social account handle without the @ prefix.
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 20
+          default: 5
+          description: Number of recent posts to return.
+      required: [screenname]
+
+  - name: social_search
+    description: >-
+      Search social posts by topic, keyword, hashtag, or phrase. Use this when
+      the user asks what people are saying about a subject. Do not use it when
+      the user asks for posts from one specific account; use timeline instead.
+    parameters:
+      type: object
+      properties:
+        query:
+          type: string
+          default: ""
+          description: Topic, keyword, hashtag, or phrase to search for.
+        search_type:
+          type: string
+          enum: [Latest, Top]
+          default: Latest
+          description: Use Top for popular/top posts; Latest for recent posts.
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 20
+          default: 5
+          description: Number of posts to return.
+      required: [query]
+
   - name: lookup
     description: >-
       Search the public web for sources related to a query. Use this when the
