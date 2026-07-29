@@ -8,6 +8,7 @@ one agent execution contract.
 from __future__ import annotations
 
 import html
+import inspect
 import json
 import os
 import sys
@@ -36,6 +37,7 @@ ARTIFACTS_DIR = ROOT / "artifacts"
 RUNS_DIR = ROOT / "runs"
 TRANSCRIPTS_DIR = ROOT / "transcripts"
 SAMPLE_TRANSCRIPT = ROOT / "samples" / "transcripts" / "example_openrouter_20260101T030000000000.transcript.json"
+VERSION_OPTIONS = ("v0", "v1", "v2", "v3")
 
 PROVIDER_META = {
     "openrouter": {
@@ -71,6 +73,8 @@ TOOL_LABELS = {
     "policy": "Tra cứu chính sách công ty",
     "papers": "Tìm kiếm trên arXiv",
     "paper_text": "Trích xuất nội dung bài báo",
+    "inspect_source": "Kiểm tra nguồn gốc và metadata của một URL",
+    "deduplicate_results": "Loại bỏ kết quả nghiên cứu trùng lặp",
 }
 
 METRICS = (
@@ -124,6 +128,36 @@ def discover_runs() -> list[dict[str, Any]]:
     return runs
 
 
+def discover_transcripts() -> list[dict[str, Any]]:
+    transcripts: list[dict[str, Any]] = []
+    for path in sorted(TRANSCRIPTS_DIR.glob("*.transcript.json"), key=lambda item: item.stat().st_mtime, reverse=True):
+        try:
+            payload = read_json(path)
+        except (OSError, json.JSONDecodeError):
+            continue
+        turns = payload.get("turns", [])
+        if not isinstance(turns, list):
+            continue
+        first_question = ""
+        if turns:
+            first_question = " ".join(str(turns[0].get("user", "")).split())
+        if len(first_question) > 42:
+            first_question = f"{first_question[:41]}…"
+        updated_at = str(payload.get("updated_at") or payload.get("created_at") or "")
+        try:
+            updated_label = datetime.fromisoformat(updated_at).strftime("%d/%m · %H:%M")
+        except ValueError:
+            updated_label = "Không rõ thời gian"
+        transcripts.append(
+            {
+                "path": path,
+                "payload": payload,
+                "label": f"{updated_label} · {len(turns)} lượt · {first_question or 'Phiên chưa có nội dung'}",
+            }
+        )
+    return transcripts
+
+
 def latest_runs_by_version(runs: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
     latest: dict[str, dict[str, Any]] = {}
     for run in runs:
@@ -172,6 +206,39 @@ def declared_tool_names(tools_path: Path) -> list[str]:
         return [str(item.get("name")) for item in load_tool_declarations(tools_path)]
     except (OSError, KeyError, TypeError, ValueError):
         return []
+
+
+def session_config_key(
+    *,
+    provider: str,
+    model: str,
+    version: str,
+    use_snapshot: bool,
+    prompt_path: Path,
+    tools_path: Path,
+    history_window: int,
+    max_tool_rounds: int,
+) -> str:
+    return "|".join(
+        [
+            provider,
+            model,
+            version,
+            str(use_snapshot),
+            str(prompt_path),
+            str(tools_path),
+            str(history_window),
+            str(max_tool_rounds),
+        ]
+    )
+
+
+def history_from_turns(turns: list[dict[str, Any]]) -> list[dict[str, str]]:
+    history: list[dict[str, str]] = []
+    for turn in turns:
+        history.append({"role": "user", "content": str(turn.get("user", ""))})
+        history.append({"role": "assistant", "content": str(turn.get("assistant_text", ""))})
+    return history
 
 
 def new_transcript(
@@ -229,16 +296,67 @@ def ensure_session(config_key: str) -> None:
 def load_demo_transcript() -> None:
     reset_conversation()
     payload = read_json(SAMPLE_TRANSCRIPT)
-    st.session_state["conversation"] = list(payload.get("turns", []))
-    history: list[dict[str, str]] = []
-    for turn in payload.get("turns", []):
-        history.append({"role": "user", "content": str(turn.get("user", ""))})
-        history.append({"role": "assistant", "content": str(turn.get("assistant_text", ""))})
-    st.session_state["history"] = history
+    turns = list(payload.get("turns", []))
+    st.session_state["conversation"] = turns
+    st.session_state["history"] = history_from_turns(turns)
     st.session_state["transcript"] = payload
     st.session_state["transcript_path"] = SAMPLE_TRANSCRIPT
     st.session_state["transcript_config"] = "demo"
     st.session_state["demo_mode"] = True
+
+
+def load_saved_transcript(path: Path) -> None:
+    resolved_path = path.resolve()
+    if resolved_path.parent != TRANSCRIPTS_DIR.resolve():
+        raise ValueError("Đường dẫn transcript không hợp lệ.")
+
+    payload = read_json(resolved_path)
+    turns = payload.get("turns", [])
+    if not isinstance(turns, list):
+        raise ValueError("Transcript không chứa danh sách lượt hội thoại hợp lệ.")
+
+    provider = str(payload.get("provider", "openrouter"))
+    if provider not in PROVIDER_META:
+        provider = "openrouter"
+    version = str(payload.get("version", "v0"))
+    if version not in VERSION_OPTIONS:
+        version = "v0"
+
+    saved_prompt = str(payload.get("system_prompt", "")).replace("\\", "/")
+    saved_tools = str(payload.get("tools", "")).replace("\\", "/")
+    snapshot_marker = f"/versions/{version}/"
+    use_snapshot = (
+        snapshot_marker in saved_prompt
+        and snapshot_marker in saved_tools
+        and available_snapshot(version)
+    )
+    prompt_path, tools_path, _ = artifact_paths(version, use_snapshot)
+    model = str(payload.get("model") or PROVIDER_META[provider]["default_model"])
+    history_window = max(1, min(12, int(payload.get("history_window", 5))))
+    max_tool_rounds = max(1, min(8, int(payload.get("max_tool_rounds", 4))))
+
+    reset_conversation()
+    st.session_state["provider_choice"] = provider
+    st.session_state["version_choice"] = version
+    st.session_state["snapshot_choice"] = use_snapshot
+    st.session_state["model_override"] = model
+    st.session_state["history_window"] = history_window
+    st.session_state["max_tool_rounds"] = max_tool_rounds
+    st.session_state["conversation"] = list(turns)
+    st.session_state["history"] = history_from_turns(turns)
+    st.session_state["transcript"] = payload
+    st.session_state["transcript_path"] = resolved_path
+    st.session_state["transcript_config"] = session_config_key(
+        provider=provider,
+        model=model,
+        version=version,
+        use_snapshot=use_snapshot,
+        prompt_path=prompt_path,
+        tools_path=tools_path,
+        history_window=history_window,
+        max_tool_rounds=max_tool_rounds,
+    )
+    st.session_state["demo_mode"] = False
 
 
 def inject_css() -> None:
@@ -293,10 +411,20 @@ def inject_css() -> None:
         .hairline-label { display:flex; gap:.7rem; align-items:center; color:var(--muted); text-transform:uppercase; letter-spacing:.14em; font-size:9px; margin:1.5rem 0 .65rem; }
         .hairline-label:after { content:""; flex:1; height:1px; background:var(--line); }
 
-        .st-key-trace-panel { border-left:1px solid var(--line); padding-left:1.25rem; min-height:410px; }
+        .st-key-trace-panel { border-left:1px solid var(--line); padding-left:1.25rem; min-height:410px; position:sticky; top:1rem; max-height:calc(100vh - 2rem); overflow-y:auto; scrollbar-width:thin; }
         .panel-kicker { color:var(--muted); font-size:9px; letter-spacing:.15em; text-transform:uppercase; margin-bottom:.35rem; }
         .panel-title { font-family:var(--serif); font-size:23px; margin-bottom:.35rem; }
         .panel-copy { color:var(--muted); font-size:12px; line-height:1.55; margin-bottom:1.1rem; }
+        .trace-current { border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:.85rem 0; margin:.2rem 0 1rem; }
+        .trace-current-head { display:flex; justify-content:space-between; align-items:baseline; gap:.75rem; }
+        .trace-current-label { color:var(--accent); font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+        .trace-current-turn { font-family:var(--serif); color:var(--ink); font-size:18px; }
+        .trace-current-question { color:var(--ink); font-size:12px; line-height:1.5; margin-top:.45rem; text-wrap:pretty; }
+        .trace-current-meta { color:var(--muted); font-size:10px; margin-top:.5rem; }
+        .trace-history { margin-top:1rem; padding-top:.75rem; border-top:1px solid var(--line); }
+        .trace-history-title { color:var(--muted); font-size:9px; letter-spacing:.12em; text-transform:uppercase; margin-bottom:.35rem; }
+        .trace-history-row { display:flex; justify-content:space-between; gap:.75rem; padding:.45rem 0; color:var(--muted); font-size:10px; border-bottom:1px solid rgba(62,58,51,.08); }
+        .trace-history-row strong { color:var(--ink); font-weight:600; }
         .trace-empty { border-top:1px solid var(--line); padding-top:.9rem; }
         .trace-placeholder { display:grid; grid-template-columns:22px 1fr; gap:.65rem; padding:.75rem 0; border-bottom:1px solid var(--line); color:var(--muted); font-size:12px; }
         .trace-index { font-family:var(--mono); font-size:10px; color:var(--accent); padding-top:2px; }
@@ -304,6 +432,13 @@ def inject_css() -> None:
         .turn-meta { display:flex; flex-wrap:wrap; gap:.45rem; margin:.55rem 0 1.1rem; }
         .meta-chip { color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:.22rem .5rem; font-size:10px; }
         .meta-chip.accent { color:var(--accent); border-color:rgba(201,111,80,.34); background:rgba(201,111,80,.06); }
+        .user-question-block { display:flex; flex-direction:column; align-items:flex-end; margin:1.6rem 0 1.8rem; }
+        .message-role { color:var(--ink); font-size:11px; font-weight:700; letter-spacing:.07em; margin-bottom:.45rem; }
+        .message-role span { color:var(--accent); font-family:var(--mono); font-size:9px; font-weight:400; margin-left:.45rem; }
+        .user-question-card { max-width:78%; background:var(--paper-deep); border-radius:18px 18px 4px 18px; padding:.9rem 1.1rem; color:var(--ink); font-size:15px; line-height:1.58; white-space:pre-wrap; text-wrap:pretty; }
+        .assistant-role { display:flex; align-items:center; gap:.7rem; color:var(--accent); font-size:11px; font-weight:700; letter-spacing:.07em; margin:.2rem 0 .15rem; }
+        .assistant-role:after { content:""; flex:1; height:1px; background:var(--line); }
+        .turn-divider { height:1px; background:var(--line); margin:1.5rem 0 2rem; }
 
         [data-testid="stChatMessage"] { background:transparent; padding:.85rem .25rem; border-radius:0; gap:0; }
         [data-testid="stChatMessageAvatarUser"], [data-testid="stChatMessageAvatarAssistant"] { display:none; }
@@ -334,6 +469,15 @@ def inject_css() -> None:
         .tool-token { border:1px solid var(--line); border-radius:999px; padding:.23rem .48rem; font-size:9px; color:var(--muted); }
         .tool-token.ready { color:var(--sage); }
         .tool-token.placeholder { border-style:dashed; }
+        .tool-catalog { border-top:1px solid var(--line); margin-top:1.1rem; }
+        .tool-catalog-row { display:grid; grid-template-columns:42px minmax(150px,.75fr) minmax(280px,2fr) 112px; gap:1rem; align-items:start; padding:1rem 0; border-bottom:1px solid var(--line); }
+        .tool-catalog-index { color:var(--accent); font-family:var(--mono); font-size:10px; padding-top:3px; }
+        .tool-catalog-name { font-family:var(--mono); font-size:12px; color:var(--ink); overflow-wrap:anywhere; }
+        .tool-catalog-desc { color:var(--ink); font-size:13px; line-height:1.5; }
+        .tool-catalog-args { color:var(--muted); font-size:10px; margin-top:.32rem; }
+        .tool-catalog-state { color:var(--sage); font-size:10px; text-transform:uppercase; letter-spacing:.08em; padding-top:3px; }
+        .tool-catalog-state.runtime-only { color:var(--accent); }
+        .tool-catalog-state.placeholder { color:var(--muted); }
         .demo-note { background:var(--paper-deep); border:1px solid var(--line); color:var(--muted); padding:.85rem 1rem; font-size:12px; line-height:1.55; margin:.2rem 0 1rem; }
 
         .stButton button { border:1px solid var(--line); border-radius:999px; background:transparent; color:var(--ink); min-height:2.35rem; height:auto; padding:.58rem .9rem; transition:all .16s ease; }
@@ -351,8 +495,11 @@ def inject_css() -> None:
         @media (max-width: 900px) {
             .workspace-header { align-items:flex-start; flex-direction:column; }
             .workspace-meta { text-align:left; }
-            .st-key-trace-panel { border-left:0; border-top:1px solid var(--line); padding:1.4rem 0 0; min-height:auto; }
+            .st-key-trace-panel { border-left:0; border-top:1px solid var(--line); padding:1.4rem 0 0; min-height:auto; position:static; max-height:none; overflow:visible; }
             .metric-grid, .version-strip { grid-template-columns:repeat(2,minmax(0,1fr)); }
+            .tool-catalog-row { grid-template-columns:32px 1fr; gap:.45rem .8rem; }
+            .tool-catalog-desc, .tool-catalog-state { grid-column:2; }
+            .user-question-card { max-width:92%; }
             .hero-empty { padding-left:.2rem; padding-right:.2rem; }
         }
         </style>
@@ -378,32 +525,78 @@ def render_sidebar(
         reset_conversation()
         st.rerun()
 
+    saved_transcripts = discover_transcripts()
+    with st.sidebar.expander(f"Lịch sử phiên · {len(saved_transcripts)}"):
+        if saved_transcripts:
+            selected_session = st.selectbox(
+                "Phiên đã lưu",
+                range(len(saved_transcripts)),
+                format_func=lambda index: saved_transcripts[index]["label"],
+                label_visibility="collapsed",
+                key="saved_transcript_selector",
+            )
+            record = saved_transcripts[selected_session]
+            payload = record["payload"]
+            st.caption(
+                f"{payload.get('version', '—')} · {payload.get('provider', '—')} · "
+                f"{payload.get('model', '—')}"
+            )
+            active_path = st.session_state.get("transcript_path")
+            is_active = bool(active_path) and Path(active_path).resolve() == record["path"].resolve()
+            if is_active:
+                st.caption("Đang mở phiên này. Lượt mới sẽ tiếp tục được lưu vào cùng transcript.")
+            if st.button("Mở lại phiên", width="stretch", key="open_saved_transcript"):
+                try:
+                    load_saved_transcript(record["path"])
+                except (OSError, json.JSONDecodeError, TypeError, ValueError) as exc:
+                    st.error(f"Không thể mở transcript: {exc}")
+                else:
+                    st.rerun()
+        else:
+            st.caption("Chưa có phiên nào. Phiên đầu tiên sẽ xuất hiện sau khi bạn gửi câu hỏi.")
+        st.caption("Các lượt mới được ghi tự động sau mỗi câu trả lời.")
+
+    st.session_state.setdefault("provider_choice", "openrouter")
     provider = st.sidebar.selectbox(
         "Nhà cung cấp mô hình",
         list(PROVIDER_META),
         format_func=lambda value: PROVIDER_META[value]["label"],
+        key="provider_choice",
     )
-    version = st.sidebar.selectbox("Phiên bản artifact", ["v0", "v1", "v2", "v3"])
+    default_version = "v1" if available_snapshot("v1") else "v0"
+    st.session_state.setdefault("version_choice", default_version)
+    version = st.sidebar.selectbox(
+        "Phiên bản artifact",
+        VERSION_OPTIONS,
+        key="version_choice",
+    )
     snapshot_exists = available_snapshot(version)
+    if "snapshot_choice" not in st.session_state:
+        st.session_state["snapshot_choice"] = snapshot_exists
+    elif not snapshot_exists:
+        st.session_state["snapshot_choice"] = False
     use_snapshot = st.sidebar.toggle(
         "Dùng snapshot đã lưu",
-        value=snapshot_exists,
         disabled=not snapshot_exists,
         help="Dùng artifacts/versions/<version> khi snapshot tương ứng tồn tại.",
+        key="snapshot_choice",
     )
     prompt_path, tools_path, artifact_source = artifact_paths(version, use_snapshot)
 
+    st.session_state.setdefault("model_override", "")
     model_override = st.sidebar.text_input(
         "Mô hình tùy chọn",
-        value="",
         placeholder=PROVIDER_META[provider]["default_model"],
         help="Để trống để dùng mô hình mặc định của nhà cung cấp.",
+        key="model_override",
     )
     model = model_override.strip() or PROVIDER_META[provider]["default_model"]
 
     with st.sidebar.expander("Cấu hình phiên chạy"):
-        history_window = st.slider("Số cặp hội thoại được nhớ", 1, 12, 5)
-        max_tool_rounds = st.slider("Số vòng công cụ tối đa", 1, 8, 4)
+        st.session_state.setdefault("history_window", 5)
+        st.session_state.setdefault("max_tool_rounds", 4)
+        history_window = st.slider("Số cặp hội thoại được nhớ", 1, 12, key="history_window")
+        max_tool_rounds = st.slider("Số vòng công cụ tối đa", 1, 8, key="max_tool_rounds")
         st.caption(artifact_source)
         st.code(str(prompt_path.relative_to(ROOT)), language=None)
 
@@ -421,9 +614,13 @@ def render_sidebar(
         unsafe_allow_html=True,
     )
 
-    st.sidebar.markdown("<div class='panel-kicker' style='margin-top:1rem'>Công cụ đã khai báo</div>", unsafe_allow_html=True)
+    st.sidebar.markdown("<div class='panel-kicker' style='margin-top:1rem'>Công cụ trong runtime</div>", unsafe_allow_html=True)
     tokens = []
+    tool_names = list(TOOL_FUNCTIONS)
     for name in declared_tool_names(tools_path):
+        if name not in tool_names:
+            tool_names.append(name)
+    for name in tool_names:
         state = "ready" if name in TOOL_FUNCTIONS else "placeholder"
         title = TOOL_LABELS.get(name, "Công cụ đang chờ triển khai")
         tokens.append(f'<span class="tool-token {state}" title="{esc(title)}">{esc(name)}</span>')
@@ -507,8 +704,15 @@ def render_empty_conversation() -> str | None:
 
 
 def render_turn(turn: dict[str, Any]) -> None:
-    with st.chat_message("user"):
-        st.markdown(str(turn.get("user", "")))
+    turn_index = turn.get("turn_index", "—")
+    st.markdown(
+        f'<div class="user-question-block">'
+        f'<div class="message-role">Bạn hỏi <span>Lượt {esc(turn_index)}</span></div>'
+        f'<div class="user-question-card">{esc(turn.get("user", ""))}</div>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown('<div class="assistant-role">Agent trả lời</div>', unsafe_allow_html=True)
     with st.chat_message("assistant"):
         error = turn.get("error")
         if error:
@@ -525,6 +729,7 @@ def render_turn(turn: dict[str, Any]) -> None:
     chips.append(f'<span class="meta-chip">{len(rounds)} vòng</span>')
     chips.append(f'<span class="meta-chip">{len(events)} lần gọi công cụ</span>')
     st.markdown(f"<div class='turn-meta'>{''.join(chips)}</div>", unsafe_allow_html=True)
+    st.markdown('<div class="turn-divider"></div>', unsafe_allow_html=True)
 
 
 def _render_trace_panel_content(conversation: list[dict[str, Any]]) -> None:
@@ -553,8 +758,18 @@ def _render_trace_panel_content(conversation: list[dict[str, Any]]) -> None:
     turn = conversation[-1]
     status_key = str(turn.get("status", "unknown"))
     status = STATUS_LABELS.get(status_key, status_key.replace("_", " "))
-    st.caption(f"Lượt {turn.get('turn_index', len(conversation))} · {status}")
     rounds = turn.get("rounds", []) or []
+    events = turn.get("tool_events", []) or []
+    turn_index = turn.get("turn_index", len(conversation))
+    st.markdown(
+        f'<div class="trace-current">'
+        f'<div class="trace-current-head"><span class="trace-current-label">Dấu vết hiện tại</span>'
+        f'<span class="trace-current-turn">Lượt {esc(turn_index)}</span></div>'
+        f'<div class="trace-current-question">{esc(turn.get("user", ""))}</div>'
+        f'<div class="trace-current-meta">{esc(status)} · {len(rounds)} vòng · {len(events)} lần gọi công cụ</div>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
     if not rounds:
         st.info("Không ghi nhận vòng công cụ nào. Mô hình có thể đã trả lời trực tiếp hoặc nhà cung cấp gặp lỗi trước khi phản hồi.")
 
@@ -574,6 +789,23 @@ def _render_trace_panel_content(conversation: list[dict[str, Any]]) -> None:
                     st.json(event.get("args", {}), expanded=True)
                 with result_tab:
                     st.json(event.get("result", {}), expanded=False)
+
+    if len(conversation) > 1:
+        history_rows = []
+        for previous_turn in reversed(conversation[:-1]):
+            previous_events = previous_turn.get("tool_events", []) or []
+            tool_names = ", ".join(str(event.get("tool", "—")) for event in previous_events) or "Không dùng công cụ"
+            history_rows.append(
+                f'<div class="trace-history-row">'
+                f'<strong>Lượt {esc(previous_turn.get("turn_index", "—"))}</strong>'
+                f'<span>{esc(tool_names)}</span>'
+                f'</div>'
+            )
+        st.markdown(
+            f'<div class="trace-history"><div class="trace-history-title">Các lượt trước</div>'
+            f'{"".join(history_rows)}</div>',
+            unsafe_allow_html=True,
+        )
 
     if st.session_state.get("transcript_path"):
         path = Path(st.session_state["transcript_path"])
@@ -635,6 +867,58 @@ def render_metric_grid(run: dict[str, Any] | None) -> None:
     st.markdown(f"<div class='metric-grid'>{''.join(cells)}</div>", unsafe_allow_html=True)
 
 
+def render_tool_catalog(tools_path: Path) -> None:
+    try:
+        declarations = load_tool_declarations(tools_path)
+    except (OSError, KeyError, TypeError, ValueError) as exc:
+        st.error(f"Không thể đọc danh mục công cụ: {exc}")
+        return
+
+    declared_by_name = {str(item.get("name")): item for item in declarations if item.get("name")}
+    tool_names = list(TOOL_FUNCTIONS)
+    for name in declared_by_name:
+        if name not in tool_names:
+            tool_names.append(name)
+
+    st.markdown("### Danh mục công cụ")
+    st.caption(
+        f"Runtime hiện có {len(TOOL_FUNCTIONS)} công cụ; artifact đang chọn khai báo "
+        f"{len(declared_by_name)} công cụ. Dấu * là tham số bắt buộc trong artifact."
+    )
+
+    rows: list[str] = []
+    for index, name in enumerate(tool_names, start=1):
+        item = declared_by_name.get(name, {})
+        description = TOOL_LABELS.get(name, str(item.get("description", "Chưa có mô tả.")))
+        required = set(item.get("parameters", {}).get("required", []) or [])
+        if name in TOOL_FUNCTIONS:
+            parameter_names = list(inspect.signature(TOOL_FUNCTIONS[name]).parameters)
+        else:
+            parameter_names = list(item.get("parameters", {}).get("properties", {}))
+        parameter_html = ", ".join(
+            f"<code>{esc(parameter)}{'*' if parameter in required else ''}</code>"
+            for parameter in parameter_names
+        ) or "Không có"
+        connected = name in TOOL_FUNCTIONS
+        declared = name in declared_by_name
+        if connected and declared:
+            state_class, state_label = "", "Đã khai báo"
+        elif connected:
+            state_class, state_label = "runtime-only", "Có runtime"
+        else:
+            state_class, state_label = "placeholder", "Placeholder"
+        rows.append(
+            f'<div class="tool-catalog-row">'
+            f'<div class="tool-catalog-index">{index:02d}</div>'
+            f'<div class="tool-catalog-name">{esc(name)}</div>'
+            f'<div class="tool-catalog-desc">{esc(description)}'
+            f'<div class="tool-catalog-args">Tham số: {parameter_html}</div></div>'
+            f'<div class="tool-catalog-state {state_class}">{state_label}</div>'
+            f'</div>'
+        )
+    st.markdown(f'<div class="tool-catalog">{"".join(rows)}</div>', unsafe_allow_html=True)
+
+
 def render_version_strip(runs: list[dict[str, Any]]) -> None:
     latest = latest_runs_by_version(runs)
     slots = []
@@ -678,7 +962,12 @@ def scenario_rows(runs: list[dict[str, Any]], case_id: str) -> list[dict[str, An
     return rows
 
 
-def render_evidence_tab(runs: list[dict[str, Any]], selected_version: str) -> None:
+def render_evidence_tab(
+    runs: list[dict[str, Any]],
+    selected_version: str,
+    active_prompt_hash: str,
+    active_tools_hash: str,
+) -> None:
     st.markdown("### Bằng chứng theo phiên bản")
     st.caption("Chỉ sử dụng run JSON thật. Phiên bản chưa chạy sẽ để trống cho tới thí nghiệm tối ưu tiếp theo.")
     render_version_strip(runs)
@@ -699,6 +988,15 @@ def render_evidence_tab(runs: list[dict[str, Any]], selected_version: str) -> No
     )
     selected = run_labels[selected_id]
     render_metric_grid(selected)
+
+    if selected.get("version") == selected_version:
+        prompt_matches = selected.get("prompt_hash") == active_prompt_hash
+        tools_match = selected.get("tools_hash") == active_tools_hash
+        if not (prompt_matches and tools_match):
+            st.warning(
+                f"Run {selected.get('run_id', selected_id)} dùng artifact cũ và không khớp snapshot {selected_version} hiện tại. "
+                f"Hãy chạy lại eval {selected_version} trước khi dùng metric này làm bằng chứng cho phiên bản mới."
+            )
 
     summary = selected.get("summary", {})
     meta_cols = st.columns(4)
@@ -848,17 +1146,15 @@ def main() -> None:
     ) = render_sidebar(runs)
 
     artifact = build_artifact_version(version, prompt_path, tools_path)
-    config_key = "|".join(
-        [
-            provider,
-            model,
-            version,
-            str(use_snapshot),
-            str(prompt_path),
-            str(tools_path),
-            str(history_window),
-            str(max_tool_rounds),
-        ]
+    config_key = session_config_key(
+        provider=provider,
+        model=model,
+        version=version,
+        use_snapshot=use_snapshot,
+        prompt_path=prompt_path,
+        tools_path=tools_path,
+        history_window=history_window,
+        max_tool_rounds=max_tool_rounds,
     )
     if st.session_state.get("transcript_config") != "demo":
         ensure_session(config_key)
@@ -870,11 +1166,18 @@ def main() -> None:
         artifact_source=artifact_source,
     )
 
-    chat_tab, evidence_tab = st.tabs(["Hội thoại", "Phòng bằng chứng"])
+    chat_tab, tools_tab, evidence_tab = st.tabs(["Hội thoại", "Công cụ", "Phòng bằng chứng"])
     with chat_tab:
         suggested_prompt = render_chat_tab()
+    with tools_tab:
+        render_tool_catalog(tools_path)
     with evidence_tab:
-        render_evidence_tab(runs, version)
+        render_evidence_tab(
+            runs,
+            version,
+            artifact.prompt_hash,
+            artifact.tools_hash,
+        )
 
     submitted = suggested_prompt
     if submitted:
