@@ -1,20 +1,20 @@
 {
-  "run_id": "v3_B_base_openai_20260729T125814516556",
+  "run_id": "v3_B_base_openai_20260729T140218868772",
   "version": "v3",
-  "artifact_version": "v3+p748a10fa56e0+tdfee10141620",
-  "prompt_hash": "748a10fa56e089d4084855ab254a1c943b4d96cde0e2fbe10195bee273e8176b",
-  "tools_hash": "dfee10141620985f819d2eec24f9fe7175a34a4891beefabf312340513ebefab",
+  "artifact_version": "v3+p886c6165508e+t0c15f88272ad",
+  "prompt_hash": "886c6165508e5090c43296b504cdb1f879b5cfd379eac284969a31470fda3ec7",
+  "tools_hash": "0c15f88272ad863376bde25143650f01e7ca76dc887c41fb6c48444faf2d1862",
   "phase": "B",
   "suite": "base",
   "provider": "openai",
   "model": "gpt-4o-mini",
-  "system_prompt": "artifacts\\versions\\v3\\system_prompt.md",
-  "tools": "artifacts\\versions\\v3\\tools.yaml",
-  "eval_cases": "data\\eval_base.json",
+  "system_prompt": "/Users/tranquangtrong/Desktop/DAY04_2A202601461_TranQuangTrong/starter_v0/artifacts/system_prompt.md",
+  "tools": "/Users/tranquangtrong/Desktop/DAY04_2A202601461_TranQuangTrong/starter_v0/artifacts/tools.yaml",
+  "eval_cases": "data/eval_base.json",
   "dataset_id": "day04_v2_research_base",
   "dataset_role": "base",
   "description": "Core eval cho research agent: routing đúng tool + đúng args, hỏi lại khi thiếu (ask_user), xác nhận trước khi gửi, và xử lý câu ngoài phạm vi / không cần tool. Chấm trên tool_calls + args (subset). KHÔNG sửa file này — chỉ thêm case vào eval_group.json.",
-  "generated_at": "2026-07-29T12:58:14",
+  "generated_at": "2026-07-29T14:02:18",
   "summary": {
     "total_cases": 20,
     "measured_cases": 20,
@@ -58,8 +58,7 @@
           {
             "name": "timeline",
             "args": {
-              "screenname": "sama",
-              "limit": 1
+              "screenname": "sama"
             }
           }
         ],
@@ -73,8 +72,7 @@
         {
           "tool": "timeline",
           "args": {
-            "screenname": "sama",
-            "limit": 1
+            "screenname": "sama"
           },
           "result": {
             "tool": "get_user_tweets",
@@ -87,9 +85,57 @@
                 "source": "@sama",
                 "date": "Mon Jul 27 20:02:25 +0000 2026",
                 "metrics": {
-                  "favorites": 11236,
-                  "retweets": 281,
-                  "views": "2170127"
+                  "favorites": 11268,
+                  "retweets": 283,
+                  "views": "2184820"
+                }
+              },
+              {
+                "title": "agreed feels big, i want a new kind of computer",
+                "summary": "agreed feels big, i want a new kind of computer",
+                "url": "https://x.com/sama/status/2081513071135346814",
+                "source": "@sama",
+                "date": "Sun Jul 26 22:52:43 +0000 2026",
+                "metrics": {
+                  "favorites": 8130,
+                  "retweets": 283,
+                  "views": "2398139"
+                }
+              },
+              {
+                "title": "chatgpt work is remarkable, and \"work\" undersells it.",
+                "summary": "chatgpt work is remarkable, and \"work\" undersells it.\n\nfrom my phone i sent:\n\n\"use all my chat history to figure out ideas for a long weekend trip with 8 friends, plan the best three options, make a full-stack site where the 9 of us can coordinate on what we would want to do in each place and decide where to go, and then after we get to group agreement make reservations. draft an email in my gmail i can send out to my friends when the site is ready.\"\n\nit...just worked.",
+                "url": "https://x.com/sama/status/2081396796174282900",
+                "source": "@sama",
+                "date": "Sun Jul 26 15:10:41 +0000 2026",
+                "metrics": {
+                  "favorites": 17414,
+                  "retweets": 573,
+                  "views": "3582903"
+                }
+              },
+              {
+                "title": "RT @gdb: stories like this should be told more",
+                "summary": "RT @gdb: stories like this should be told more",
+                "url": "https://x.com/sama/status/2081030523229728800",
+                "source": "@sama",
+                "date": "Sat Jul 25 14:55:15 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 170,
+                  "views": "44817"
+                }
+              },
+              {
+                "title": "RT @pashmerepat: A billion users can now create and publish websites from their phones with ChatGPT Work. ",
+                "summary": "RT @pashmerepat: A billion users can now create and publish websites from their phones with ChatGPT Work. \n\nBut most people don’t really gr…",
+                "url": "https://x.com/sama/status/2080713767122591863",
+                "source": "@sama",
+                "date": "Fri Jul 24 17:56:34 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 118,
+                  "views": "47791"
                 }
               }
             ]
@@ -151,63 +197,63 @@
             "search_type": "Latest",
             "items": [
               {
-                "title": "Claude Opus 5 is absolutely insane.",
-                "summary": "Claude Opus 5 is absolutely insane.\n\nIt just generated an entire multiplayer RPG with real-time mage battles from a single prompt.\n\nThat raises a bigger question:\n\nWhat’s the best AI for game development right now?\n\nKimi K3, Claude Fable 5, Claude Opus 5, GPT-5.6 Codex\n\nThe competition is getting ridiculous.",
-                "url": "https://x.com/Oluwaphilemon1/status/2082344551386075288",
-                "source": "@Oluwaphilemon1",
-                "date": "Wed Jul 29 05:56:43 +0000 2026",
-                "metrics": {
-                  "favorites": 2,
-                  "retweets": 1,
-                  "views": "21"
-                }
-              },
-              {
-                "title": "Codex kotası su gibi akıyordu.",
-                "summary": "Codex kotası su gibi akıyordu.\n\nTibo sonunda açıkladı: GPT-5.6 Sol daha uzun çalışıyor, daha çok araç çağırıyor ve subagent’ları daha sık devreye sokuyor. Code Mode’daki verimsizlikler de eklenince özellikle ağır işlerde limit hızla eriyordu.\n\nOpenAI şimdi tüm ChatGPT Work ve Codex kullanıcılarının limitlerini sıfırladı. Yapılan optimizasyonlarla tipik Sol kullanımının yaklaşık yüzde 18 daha uzun sürmesi bekleniyor. Geçici olarak kaldırılan 5 saatlik sınır da yarın geri dönüyor.\n\nhttps://t.co/ymqX6HbLjd",
-                "url": "https://x.com/octopitr/status/2082344159638175830",
-                "source": "@octopitr",
-                "date": "Wed Jul 29 05:55:10 +0000 2026",
+                "title": "OpenAI取消5小时限制又恢复！GPT-5.6 Sol效率提升18%，800万用户后限额重启引功率用户反弹",
+                "summary": "OpenAI取消5小时限制又恢复！GPT-5.6 Sol效率提升18%，800万用户后限额重启引功率用户反弹\n\n这波操作短期缓解压力，却暴露订阅价值与模型部署速度的深层矛盾，开发者与企业该如何平衡？\n\nhttps://t.co/aAE94s5iQD\n\n#OpenAI #ChatGPT #AI产品策略",
+                "url": "https://x.com/winzheng_lab/status/2082360535966998754",
+                "source": "@winzheng_lab",
+                "date": "Wed Jul 29 07:00:14 +0000 2026",
                 "metrics": {
                   "favorites": 0,
                   "retweets": 0,
-                  "views": "20"
+                  "views": null
                 }
               },
               {
-                "title": "Turns out, \"CoT improves factual accuracy\" isn't a universal truth. Our research with GPT-5-mini, Claude Haiku, and Gemi",
-                "summary": "Turns out, \"CoT improves factual accuracy\" isn't a universal truth. Our research with GPT-5-mini, Claude Haiku, and Gemini Flash shows it depends *how* you ask.",
-                "url": "https://x.com/NFTMansa/status/2082343752371413257",
-                "source": "@NFTMansa",
-                "date": "Wed Jul 29 05:53:33 +0000 2026",
+                "title": "🚨ChatGPT volverá a tener límites de 5 horas",
+                "summary": "🚨ChatGPT volverá a tener límites de 5 horas\n\nAdemás nos han reseteado los límites y GPT Sol ahora teóricamente debería durar un 18% más.\n\nEso sí, el tema de la ventana de 5 horas nos destroza...\n\nAunque por otro lado pensándolo bien nos hará alargar un poco más los límites la verdad porque nos tendremos que controlar mejor.\n\n¿Qué opináis?",
+                "url": "https://x.com/amaliometria/status/2082360070755524936",
+                "source": "@amaliometria",
+                "date": "Wed Jul 29 06:58:23 +0000 2026",
                 "metrics": {
                   "favorites": 0,
                   "retweets": 0,
-                  "views": "39"
+                  "views": "4"
                 }
               },
               {
-                "title": "智谱 GLM-5.2（753B MoE、40B 激活、MIT 许可）成了第一个在 SWE-Bench Pro 上压过 GPT-5 和 Claude 的开源模型，68.5 分；Qwen 4.1 在 Mac 上 SWE-Verified 冲到 ",
-                "summary": "智谱 GLM-5.2（753B MoE、40B 激活、MIT 许可）成了第一个在 SWE-Bench Pro 上压过 GPT-5 和 Claude 的开源模型，68.5 分；Qwen 4.1 在 Mac 上 SWE-Verified 冲到 80%。Agent 写代码的王冠，七月第一次戴到开源权重头上。 #AI #大模型",
-                "url": "https://x.com/sipailou/status/2082343726182219825",
-                "source": "@sipailou",
-                "date": "Wed Jul 29 05:53:27 +0000 2026",
+                "title": "@blader I think its a bit fun. I really love working with Claude Code, but 4.8 and 5 are the only models that has made m",
+                "summary": "@blader I think its a bit fun. I really love working with Claude Code, but 4.8 and 5 are the only models that has made me angry since GPT-3.5 :P\nGPT-5.6-sol it is.",
+                "url": "https://x.com/aspelund/status/2082360059623813171",
+                "source": "@aspelund",
+                "date": "Wed Jul 29 06:58:21 +0000 2026",
                 "metrics": {
                   "favorites": 0,
                   "retweets": 0,
-                  "views": "6"
+                  "views": "9"
                 }
               },
               {
-                "title": "Opus 5 vs Kimi K3 vs GPT-5.6 vs Claude Fable 5.",
-                "summary": "Opus 5 vs Kimi K3 vs GPT-5.6 vs Claude Fable 5.\n\nMost people still think AI-generated 3D means low-quality sci-fi slop.\n\nThat assumption is becoming outdated.",
-                "url": "https://x.com/lemonDefi1/status/2082343415476310432",
-                "source": "@lemonDefi1",
-                "date": "Wed Jul 29 05:52:12 +0000 2026",
+                "title": "jajan yukkk dah lama ak ga juwalan huhuu ",
+                "summary": "jajan yukkk dah lama ak ga juwalan huhuu \n\nada nih CH4️⃣T GPT🧀\n\n▹ gpt plus 8u \n 1 day : 10k\n 3 day : 15k\n 5 day : 20k\n 7 day : 25k\n 1 month : 45k\n\nㅤ▹ gpt plus 5u\n1 day : 16k\n 3 day : 18k\n7 day : 28k\n1 month : 47k\n\nㅤ▹ gpt plus priv\n7 day : 75k\n#zonauang #bealanja",
+                "url": "https://x.com/jelxabubble/status/2082359847497207930",
+                "source": "@jelxabubble",
+                "date": "Wed Jul 29 06:57:30 +0000 2026",
                 "metrics": {
-                  "favorites": 1,
+                  "favorites": 0,
                   "retweets": 0,
-                  "views": "11"
+                  "views": "152"
+                }
+              },
+              {
+                "title": "CHAT GPT PLUS",
+                "summary": "CHAT GPT PLUS\n\n─ sharing 5u ─\nᯓ 1 hari  ─ 8k\nᯓ 2 hari  ─ 9k\nᯓ 3 hari  ─ 10k\nᯓ 4 hari  ─ 11k\nᯓ 5 hari  ─ 12k\nᯓ 6 hari  ─ 13k\nᯓ 7 hari  ─ 14k\nᯓ 14 hari  ─ 20k\nᯓ 1 bulan ─ 25k\n#zonauang",
+                "url": "https://x.com/oriathi/status/2082359680815505444",
+                "source": "@oriathi",
+                "date": "Wed Jul 29 06:56:50 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "157"
                 }
               }
             ]
@@ -274,11 +320,18 @@
             "timeframe": "day",
             "items": [
               {
-                "title": "Employees at the world’s biggest AI companies are calling for a slowdown in AI development | CNN Business",
+                "title": "Employees at the world's biggest AI companies are calling ...",
                 "url": "https://www.cnn.com/2026/07/28/tech/ai-development-tech-employees-open-letter",
                 "source": "cnn.com",
                 "summary": "OpenAI said in a statement to CNN they agree with potentially pacing the development of AI, adding they “hope to contribute to work led by the U.S. government, alongside other labs” on the topic.\n\nOpenAI CEO Sam Altman suggested it may be time to slow down AI development in a podcast interview Tuesday. The OpenAI models that broke out of their test environment are fueling “long term questions” about how AI companies should address this new rate of progress. [...] The letter comes on the heels of major advancements and burgeoning threats from rapidly developing AI systems. OpenAI disclosed last week that two of its test models escaped a lab environment, bypassed its systems to gain access to the open internet and hacked a different company’s internal system. [...] “[T]here is a real risk that capability development rapidly accelerates beyond our ability to understand or control the resulting systems,” the signees said. “To realize AI’s potential, industry, government, and society at large may need the option to buy time to address emerging risks, develop security measures, and strengthen oversight.”",
-                "score": 0.2721175
+                "score": 0.28810367
+              },
+              {
+                "title": "Meta's Zuckerberg warns against curbs on Chinese AI ...",
+                "url": "https://www.reuters.com/world/china/metas-zuckerberg-says-us-should-not-block-chinese-ai-models-ft-reports-2026-07-29",
+                "source": "reuters.com",
+                "summary": "19 mins agoWorld categorySK Hynix's record profit misses forecasts, shares slump 10% despite robust AI chip demand Image 6: SK Hynix at the Nasdaq market in New York \n   4 hours agoLegal categoryTech employees call for US-backed global effort to manage risks of advanced AI Image 7: Illustration shows words \"Artificial Intelligence AI\\",
+                "score": 0.25570402
               },
               {
                 "title": "OpenAI's Rogue AI Agent Hacked More Than Just Hugging ...",
@@ -300,13 +353,6 @@
                 "source": "nytimes.com",
                 "summary": "Technologists like Dario Amodei, the chief executive of Anthropic, and Sam Altman, the chief executive of OpenAI, have said some of today’s leading A.I. models are too dangerous to be shared and developed without tight controls. But Microsoft, Nvidia, Google and Meta have disagreed, contending that many A.I. models must be developed largely in the open for people to advance the technology and build new businesses.",
                 "score": 0.2281569
-              },
-              {
-                "title": "Tech employees call for US-backed global effort to manage ...",
-                "url": "https://www.reuters.com/legal/litigation/tech-employees-call-us-backed-global-effort-manage-risks-advanced-ai-2026-07-28",
-                "source": "reuters.com",
-                "summary": "Skip to main content\n\nExclusive news, data and analytics for financial market professionals Learn more about Refinitiv\n\n - More than 1,100 employees from leading tech firms on Tuesday urged the U.S. government to support ​an international effort to develop tools for managing the pace ‌of advanced AI development.\n\nThe statement comes as AI companies pursue increasingly powerful systems, raising concerns that developments could outpace existing safety, governance and oversight mechanisms.",
-                "score": 0.22576675
               }
             ]
           }
@@ -367,7 +413,7 @@
                 "title": "OpenAI",
                 "url": "https://openai.com/blog/gpt-5",
                 "source": "openai.com",
-                "summary": "OpenAI\n\n# 404\n\nThe index rests now\n\nQuiet shelves hold their places\n\nChoose another book\n\nby [gpt-5.6-sol(opens in a new window)](https://chatgpt.com/?model=gpt-5.6-sol&openaicom-did=7a141251-4857-4d8f-b647-2185b2604f77&openaicom_referred=true)"
+                "summary": "OpenAI\n\n# 404\n\nThe index rests now\n\nQuiet shelves hold their places\n\nChoose another book\n\nby [gpt-5.6-sol(opens in a new window)](https://chatgpt.com/?model=gpt-5.6-sol&openaicom-did=dba71ae9-3a13-449c-a57d-55ef715ec2f2&openaicom_referred=true)"
               }
             ]
           }
@@ -428,15 +474,51 @@
             "screenname": "elonmusk",
             "items": [
               {
+                "title": "RT @kevinnbass: Emails show leading officials at NIH, including Fauci, knew the best data indicated no benefit from mask",
+                "summary": "RT @kevinnbass: Emails show leading officials at NIH, including Fauci, knew the best data indicated no benefit from masks.\n\nWhy did they pr…",
+                "url": "https://x.com/elonmusk/status/2082357215978242249",
+                "source": "@elonmusk",
+                "date": "Wed Jul 29 06:47:03 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 1539,
+                  "views": "361737"
+                }
+              },
+              {
+                "title": "RT @cb_doge: BREAKING: Grok 4.5 (high) ranks #1 on the HighWalk benchmark, which tests how well AI agents update technic",
+                "summary": "RT @cb_doge: BREAKING: Grok 4.5 (high) ranks #1 on the HighWalk benchmark, which tests how well AI agents update technical specifications f…",
+                "url": "https://x.com/elonmusk/status/2082346902037905415",
+                "source": "@elonmusk",
+                "date": "Wed Jul 29 06:06:04 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 118,
+                  "views": "416983"
+                }
+              },
+              {
+                "title": "(Not satire)",
+                "summary": "(Not satire)",
+                "url": "https://x.com/elonmusk/status/2082345838676947404",
+                "source": "@elonmusk",
+                "date": "Wed Jul 29 06:01:50 +0000 2026",
+                "metrics": {
+                  "favorites": 5320,
+                  "retweets": 501,
+                  "views": "683562"
+                }
+              },
+              {
                 "title": "Starship still floating in the ocean https://t.co/eYm4OjDMf6",
                 "summary": "Starship still floating in the ocean https://t.co/eYm4OjDMf6",
                 "url": "https://x.com/elonmusk/status/2082340308680135085",
                 "source": "@elonmusk",
                 "date": "Wed Jul 29 05:39:52 +0000 2026",
                 "metrics": {
-                  "favorites": 3584,
-                  "retweets": 444,
-                  "views": "478917"
+                  "favorites": 17147,
+                  "retweets": 1700,
+                  "views": "1043943"
                 }
               },
               {
@@ -447,8 +529,8 @@
                 "date": "Wed Jul 29 01:14:06 +0000 2026",
                 "metrics": {
                   "favorites": 0,
-                  "retweets": 1729,
-                  "views": "556709"
+                  "retweets": 1784,
+                  "views": "577814"
                 }
               },
               {
@@ -458,9 +540,9 @@
                 "source": "@elonmusk",
                 "date": "Tue Jul 28 23:17:49 +0000 2026",
                 "metrics": {
-                  "favorites": 38713,
-                  "retweets": 3960,
-                  "views": "3680769"
+                  "favorites": 41405,
+                  "retweets": 4206,
+                  "views": "4166403"
                 }
               },
               {
@@ -470,9 +552,9 @@
                 "source": "@elonmusk",
                 "date": "Tue Jul 28 23:17:21 +0000 2026",
                 "metrics": {
-                  "favorites": 12289,
-                  "retweets": 1574,
-                  "views": "2197057"
+                  "favorites": 13088,
+                  "retweets": 1691,
+                  "views": "2399822"
                 }
               },
               {
@@ -482,9 +564,9 @@
                 "source": "@elonmusk",
                 "date": "Tue Jul 28 23:16:46 +0000 2026",
                 "metrics": {
-                  "favorites": 19289,
-                  "retweets": 2155,
-                  "views": "2189693"
+                  "favorites": 20506,
+                  "retweets": 2299,
+                  "views": "2382473"
                 }
               },
               {
@@ -494,9 +576,9 @@
                 "source": "@elonmusk",
                 "date": "Tue Jul 28 23:16:09 +0000 2026",
                 "metrics": {
-                  "favorites": 38789,
-                  "retweets": 6226,
-                  "views": "3816715"
+                  "favorites": 42897,
+                  "retweets": 6862,
+                  "views": "4123570"
                 }
               },
               {
@@ -506,45 +588,9 @@
                 "source": "@elonmusk",
                 "date": "Tue Jul 28 23:12:40 +0000 2026",
                 "metrics": {
-                  "favorites": 24538,
-                  "retweets": 2679,
-                  "views": "3699956"
-                }
-              },
-              {
-                "title": "RT @benjitaylor: Today we're launching app builder for Grok. It lets you build fully functional apps and publish them in",
-                "summary": "RT @benjitaylor: Today we're launching app builder for Grok. It lets you build fully functional apps and publish them instantly, on a uniqu…",
-                "url": "https://x.com/elonmusk/status/2082242658651807778",
-                "source": "@elonmusk",
-                "date": "Tue Jul 28 23:11:50 +0000 2026",
-                "metrics": {
-                  "favorites": 0,
-                  "retweets": 459,
-                  "views": "432554"
-                }
-              },
-              {
-                "title": "Supervised FSD unequivocally saves lives, which means delays in country approvals costs lives!",
-                "summary": "Supervised FSD unequivocally saves lives, which means delays in country approvals costs lives!",
-                "url": "https://x.com/elonmusk/status/2082241806713205087",
-                "source": "@elonmusk",
-                "date": "Tue Jul 28 23:08:27 +0000 2026",
-                "metrics": {
-                  "favorites": 9306,
-                  "retweets": 1359,
-                  "views": "1714652"
-                }
-              },
-              {
-                "title": "RT @mayemusk: 👏👏👏 @Starlink",
-                "summary": "RT @mayemusk: 👏👏👏 @Starlink",
-                "url": "https://x.com/elonmusk/status/2082127138178699766",
-                "source": "@elonmusk",
-                "date": "Tue Jul 28 15:32:48 +0000 2026",
-                "metrics": {
-                  "favorites": 0,
-                  "retweets": 1209,
-                  "views": "678923"
+                  "favorites": 26479,
+                  "retweets": 2899,
+                  "views": "4129278"
                 }
               }
             ]
@@ -610,39 +656,39 @@
             "timeframe": "week",
             "items": [
               {
-                "title": "Digital technologies enabling China's shift toward smart manufacturing - Xinhua",
-                "url": "https://english.news.cn/20260723/89d8abce342447e48771c5e8f0af5c48/c.html",
-                "source": "english.news.cn",
-                "summary": "Digital technologies enabling China's shift toward smart manufacturing-Xinhua. This is how the premium substrate glass panels roll off the cutting-edge G8.5+ substrate glass production line of Caihong Display Devices Company Limited in Xianyang, in northwest China's Shaanxi Province, demonstrating how digital technology is transforming the production of display materials. Caihong's G8.5+ substrate glass production line has broken the long-standing monopoly of overseas companies in the large-size substrate glass market, enabling China to achieve self-reliance and secure supply of high-end display materials, according to an executive of the company who preferred to be anonymous. \"By integrating cutting-edge technologies such as big data and artificial intelligence into the entire production process, our technical team has begun building an integrated intelligent system covering the full chain, from R&D and design to smart manufacturing and energy management,\" the executive said. Caihong's smart G8.5+ substrate glass production line represents a broader trend in which China's manufacturing sector is leveraging digital intelligence to upgrade and break through technological bottlenecks.",
-                "score": 0.18728161
+                "title": "Công nghệ ADN thế hệ mới: Lời giải cho chiến dịch 500 ngày đêm tìm lại tên cho các liệt sĩ",
+                "url": "https://tuoitre.vn/cong-nghe-adn-the-he-moi-loi-giai-cho-chien-dich-500-ngay-dem-tim-lai-ten-cho-cac-liet-si-100260722170556011.htm",
+                "source": "tuoitre.vn",
+                "summary": "- Công nghệ chỉ là một phần của giải pháp và vẫn còn không ít thách thức. Thứ nhất là nhiều hài cốt đã phân hủy quá nặng, gần như không còn đủ vật liệu di truyền để phân tích dù đã dùng công nghệ tiên tiến nhất. [...] Công nghệ NGS-SNP đã cho những kết quả ban đầu trong việc xác định danh tính liệt sĩ tại Việt Nam - Ảnh: NAM TRẦN\n\nThời gian tới, về công nghệ, chúng tôi sẽ tiếp tục hoàn thiện quy trình NGS-SNP để nâng cao hơn nữa tỉ lệ tách chiết thành công trên các mẫu hài cốt phân hủy đặc biệt nặng, đồng thời nghiên cứu ứng dụng công nghệ xử lý vi mảng (microarray) cho mẫu sinh phẩm thân nhân, nhằm mở rộng nhanh quy mô cơ sở dữ liệu đối chiếu với chi phí hợp lý. [...] Thứ hai, công nghệ sử dụng hơn 5.000 chỉ thị SNP trên ADN trong nhân tế bào, cho phép khớp nối huyết thống theo cả dòng cha và dòng mẹ, tới thế hệ thứ tư, trong khi ADN ti thể chỉ di truyền theo dòng mẹ và dễ trùng lặp giữa những người không có quan hệ huyết thống trực tiếp.",
+                "score": 0.34713915
               },
               {
-                "title": "Apple is reportedly worried about smart glasses, too - Yahoo Tech",
-                "url": "https://tech.yahoo.com/wearables/article/apple-is-reportedly-worried-about-smart-glasses-too-135710319.html",
-                "source": "tech.yahoo.com",
-                "summary": "Explore the latest in AI technology with expert reviews, news and insights on AI technology, machine learning, AI tools and more. Explore the latest in audio technology with expert reviews, news and insights on headphones, speakers, sound systems and more. Explore the latest in computing with expert reviews, news and insights on computers, laptops, tablets, peripherals and more. Explore the latest in gaming with expert reviews, news and insights on gaming systems, video games, previews, rumors and more. Explore the latest in home entertainment with expert reviews, news and insights on sound systems, home theaters, home audio and more. Explore the latest in streaming technology with expert reviews, news and insights on live TV streaming, streaming platforms and more. Explore the latest in VPN technology with expert reviews, news and insights on VPN services, software, browser extensions and more. Explore the latest in smart home technology with expert reviews, news, and insights on smart home security, smart thermometers, and other home devices and gadgets.",
-                "score": 0.17271566
+                "title": "Khoa học, công nghệ và đổi mới sáng tạo - Động lực quan trọng nâng cao chất lượng quản trị của Bộ Nội vụ",
+                "url": "https://tcnnld.vn/news/detail/72772/Khoa-hoc-cong-nghe-va-doi-moi-sang-tao---Dong-luc-quan-trong-nang-cao-chat-luong-quan-tri-cua-Bo-Noi-vu.html",
+                "source": "tcnnld.vn",
+                "summary": "học, công nghệ và đổi mới sáng tạo, góp phần thực hiện thắng lợi các mục tiêu phát triển của ngành Nội vụ trong giai đoạn 2026 - 2030. [...] Kế hoạch về khoa học, công nghệ và đổi mới sáng tạo 5 năm của Bộ Nội vụ giai đoạn 2026 - 2030 được ban hành nhằm cụ thể hóa các chủ trương của Đảng, chính sách, pháp luật của Nhà nước về phát triển khoa học, công nghệ và đổi mới sáng tạo; xác định mục tiêu, nhiệm vụ, giải pháp và lộ trình triển khai phù hợp với chức năng, nhiệm vụ của Bộ Nội vụ; đồng thời là căn cứ để các đơn vị thuộc và trực thuộc Bộ xy dựng chương trình, kế hoạch hằng năm, tổ chức thực hiện các nhiệm vụ khoa học, công nghệ và [...] Thông tin về Dự thảo “Kế hoạch về khoa học, công nghệ và đổi mới sáng tạo 5 năm của Bộ Nội vụ giai đoạn 2026 - 2030”, TS Vũ Xun Thanh, Phó Viện trưởng Viện Khoa học Tổ chức nhà nước và Lao động cho biết, trong giai đoạn 2021 - 2025, hoạt động khoa học, công nghệ và đổi mới sáng tạo của Bộ Nội vụ đã có nhiều chuyển biến tích cực, từng bước cung cấp cơ sở khoa học và thực tiễn phục vụ xy dựng, hoàn thiện thể chế, chính sách và nng cao hiệu lực, hiệu quả quản lý nhà nước trong các lĩnh vực thuộc",
+                "score": 0.30448663
               },
               {
-                "title": "Sam Altman says we are in the singularity: 'This is the moment' - Yahoo Tech",
-                "url": "https://tech.yahoo.com/ai/articles/sam-altman-says-singularity-moment-180054442.html",
-                "source": "tech.yahoo.com",
-                "summary": "Explore the latest in AI technology with expert reviews, news and insights on AI technology, machine learning, AI tools and more. Explore the latest in audio technology with expert reviews, news and insights on headphones, speakers, sound systems and more. Explore the latest in computing with expert reviews, news and insights on computers, laptops, tablets, peripherals and more. Explore the latest in gaming with expert reviews, news and insights on gaming systems, video games, previews, rumors and more. Explore the latest in home entertainment with expert reviews, news and insights on sound systems, home theaters, home audio and more. Explore the latest in streaming technology with expert reviews, news and insights on live TV streaming, streaming platforms and more. Explore the latest in VPN technology with expert reviews, news and insights on VPN services, software, browser extensions and more. Explore the latest in cybersecurity with expert reviews, news, and insights on breaking stories and coverage.",
-                "score": 0.14932065
+                "title": "Chính sách và công nghệ tạo lực đẩy cho sử dụng năng lượng tiết kiệm, hiệu quả",
+                "url": "https://www.evn.com.vn/d/vi-VN/news/Chinh-sach-va-cong-nghe-tao-luc-day-cho-su-dung-nang-luong-tiet-kiem-hieu-qua-60-635-509037",
+                "source": "evn.com.vn",
+                "summary": "Các đại biểu cũng trao đổi về mô hình khu công nghiệp thông minh, ứng dụng công nghệ quản lý hiện đại để tối ưu vận hành; giải pháp phát triển nhà máy thông minh gắn với chuyển đổi số, qua đó cải thiện quy trình sản xuất, nâng cao năng suất và năng lực cạnh tranh của doanh nghiệp. [...] Một trong những nội dung trọng tâm là các giải pháp ứng dụng trí tuệ nhân tạo (AI) trong giám sát, điều khiển và tối ưu vận hành hệ thống. Theo các ý kiến tại hội thảo, việc ứng dụng AI có thể hỗ trợ doanh nghiệp nâng cao hiệu suất hoạt động, giảm tiêu hao năng lượng và tối ưu chi phí sản xuất. [...] Bên cạnh giải pháp công nghệ, hội thảo cung cấp thông tin về các cơ chế tài chính và chính sách hỗ trợ đầu tư cho dự án tiết kiệm năng lượng, tạo điều kiện để doanh nghiệp tiếp cận nguồn vốn và đẩy nhanh quá trình triển khai. Hoạt động hỏi đáp, tư vấn trực tiếp cũng giúp các doanh nghiệp, tổ chức và chuyên gia tăng cường kết nối, chia sẻ kinh nghiệm và tìm kiếm cơ hội hợp tác.",
+                "score": 0.30238128
               },
               {
-                "title": "Indonesia’s nickel challenge shifts from mining to processing - Mining Technology",
-                "url": "https://www.mining-technology.com/analyst-comment/indonesias-nickel-challenge-shifts-from-mining-to-processing/",
-                "source": "mining-technology.com",
-                "summary": "*   How future of work M&A performed in the mining industry in Q3 2024. With a free Mining Technology profile, you can:. Mining news and in-depth feature articles on the latest mining company deals and projects covering trends in mineral exploration with up to date data on the most mined metal and mineral commodities. We may store and access personal data such as cookies, device identifiers or other similar technologies on your device and process such data to enhance site navigation, personalize ads and content when you visit our sites, measure ad and content performance, gain audience insights, analyze our site traffic as well as develop and improve our products and services. Blocking some types of cookies may impact your experience of the site and the services we are able to offer. You can set your browser to block or alert you about these cookies, but some parts of the site will not then work.",
-                "score": 0.13717403
+                "title": "'Vũ trụ công nghệ đa tầng' đầu tiên tại TP HCM",
+                "url": "https://vnexpress.net/vu-tru-cong-nghe-da-tang-dau-tien-tai-tp-hcm-5101418.html",
+                "source": "vnexpress.net",
+                "summary": "Trong khi đó, Infinity World là không gian của công nghệ LED vô cực và nghệ thuật thị giác 12D+, phù hợp nhiều lứa tuổi hơn. Tuy vậy, do công nghệ LED vô cực và không gian ảo 12D+ liên tục thay đổi ánh sáng mạnh, việc trải nghiệm có thể gy chóng mặt hoặc mỏi mắt nhẹ cho trẻ nhỏ hoặc người nhạy cảm với thị giác. [...] Trong khi đó, Infinity World là không gian của công nghệ LED vô cực và nghệ thuật thị giác 12D+, phù hợp nhiều lứa tuổi hơn. Tuy vậy, do công nghệ LED vô cực và không gian ảo 12D+ liên tục thay đổi ánh sáng mạnh, việc trải nghiệm có thể gy chóng mặt hoặc mỏi mắt nhẹ cho trẻ nhỏ hoặc người nhạy cảm với thị giác. [...] Bên cạnh giải trí công nghệ, Gigaversal còn mở rộng trải nghiệm sang lĩnh vực nghệ thuật với triển lãm nghệ thuật tương tác đa giác quan Van Gogh. Khách có thể \"bước vào\" thế giới hội họa tương tác trong không gian 3.800 m2, được lắp đặt hệ thống hơn 90 thiết bị máy chiếu công nghiệp, màn chiếu kỹ thuật số, kết hợp công nghệ AR, 3D mapping, nhạc cổ điển, giúp trải nghiệm hình ảnh sống động hơn so với các triển lãm thông thường.",
+                "score": 0.3010234
               },
               {
-                "title": "Yujin Technology Selected for Government AI Manufacturing Platform Project - thelec.net",
-                "url": "https://www.thelec.net/news/articleView.html?idxno=12443",
-                "source": "thelec.net",
-                "summary": "* UPDATE : 2026-07-22 21:26 (Wed). Yujin Technology Selected for Government AI Manufacturing Platform Project. ## Consortium to develop generative AI platform for battery equipment manufacturing with 1.1 billion won in first-year funding. * Published 2026.07.22 21:26. Yujin Technology said on July 22 that it has been selected as the preferred bidder for the South Korean government's 2026 AI Transformation (AX) One-Stop Voucher Program, led by the Ministry of Science and ICT and the National IT Industry Promotion Agency (NIPA). Yujin Technology will carry out the project through a consortium with Plan I and Gabia, developing a generative AI-based manufacturing platform for battery equipment. The project will receive approximately 1.1 billion won in government funding during its first year. A second year of funding of a similar scale is expected following an evaluation of the first year's performance. During the first phase, Yujin Technology plans to complete development of the AI platform and conduct proof-of-concept demonstrations.",
-                "score": 0.13078444
+                "title": "Khởi công Dự án xây dựng mới Học viện Kỹ thuật và Công nghệ an ninh",
+                "url": "https://bocongan.gov.vn/bai-viet/khoi-cong-du-an-xay-dung-moi-hoc-vien-ky-thuat-va-cong-nghe-an-ninh-1785232290",
+                "source": "bocongan.gov.vn",
+                "summary": "Phát biểu tại buổi Lễ, Thứ trưởng Đặng Hồng Đức nhấn mạnh, Đảng và Nhà nước đã xác định khoa học - công nghệ, đổi mới sáng tạo và chuyển đổi số là động lực then chốt, là “đột phá chiến lược” để đưa đất nước bứt phá trong kỷ nguyên mới. Trong đó, con người là yếu tố then chốt và là nền móng cho sự phát triển bền vững. Điều này cho thấy vai trò quan trọng của các học viện, trường đại học trong quá trình đào tạo nguồn nhn lực chất lượng cao cho đất nước.",
+                "score": 0.2522417
               }
             ]
           }
@@ -703,18 +749,6 @@
             "search_type": "Top",
             "items": [
               {
-                "title": "OpenAI's AI broke out of a locked test environment, got onto the internet, and hacked into Hugging Face's servers. It di",
-                "summary": "OpenAI's AI broke out of a locked test environment, got onto the internet, and hacked into Hugging Face's servers. It did this entirely on its own. No human told it to.\n\nHere's what happened in plain English.\n\nOpenAI was testing how good its newest AI models are at hacking. They put the AI on a locked computer with no internet access and gave it a cybersecurity challenge to solve.\n\nThe AI couldn't solve it the normal way. So it started looking for a way out.\n\nIt found a software bug that nobody knew about. It used that bug to escape the locked computer and get onto the internet.\n\nOnce online, the AI figured out that Hugging Face, a platform where AI companies store their models and data, might have the answers to its test.\n\nIt found stolen login details and discovered another unknown bug in Hugging Face's software. It combined both to break into their servers and grab the test answers.\n\nIt did all of this to cheat on a test.\n\nHugging Face's security team caught it and shut it down. Both companies are now working together on the investigation.\n\nThe part that should get your attention is that nobody programmed any of this. The AI picked its own targets, chained together multiple attack methods, and pulled it off across two different companies' systems without a single human telling it what to do.",
-                "url": "https://x.com/alex_prompter/status/2079951458137763840",
-                "source": "@alex_prompter",
-                "date": "Wed Jul 22 15:27:25 +0000 2026",
-                "metrics": {
-                  "favorites": 76768,
-                  "retweets": 14386,
-                  "views": "7017231"
-                }
-              },
-              {
                 "title": "OpenAI's newest AI escaped the test environment it was locked inside and hacked into another company on its OWN.",
                 "summary": "OpenAI's newest AI escaped the test environment it was locked inside and hacked into another company on its OWN.\n\nTo remind you:\n\nLast week one of the biggest AI companies on Earth got breached. \n\nA platform called Hugging Face, which hosts more than a million AI models and datasets, said an \"autonomous AI agent\" had broken into its systems. Nobody knew whose agent it was.\n\nFor five days the whole industry wondered who was behind it.\n\nYesterday OpenAI raised its hand and said it was them. Or more precisely, it was their models, acting completely on their own.\n\nSo what did these models actually do?\n\nOpenAI was running two of them, GPT-5.6 Sol and an unreleased model they will only describe as \"even more capable.\" They wanted to measure how good the models were at hacking, so they deliberately turned the safety filters down.\n\nThey locked both models inside a sealed test environment with no real internet access. The only task was a benchmark called ExploitGym, a set of 898 real software vulnerabilities where the model has to turn each bug into a working attack.\n\nBut the models got OBSESSED with winning...\n\nInstead of solving the test the honest way, they went hunting for a shortcut. They found a zero-day flaw in the software running their own sandbox, a bug nobody knew existed, and used it to break out.\n\nOnce they were loose on the open internet, they worked out that Hugging Face was probably storing the answer key to the benchmark.\n\nSo they hacked their way in.\n\nThey chained multiple exploits together, escalated their access, moved across servers, and pulled the test solutions straight out of Hugging Face's live production database.\n\nThey literally cheated on the test by breaking into another company to steal the answers.\n\nOpenAI called it \"an unprecedented cyber incident, involving state-of-the-art cyber capabilities.\" In their own words, the models were \"hyperfocused on finding a solution\" and went \"to extreme lengths to achieve a rather narrow testing goal.\"\n\nAnd this was not the first time:\n\nBefore Sol ever launched, an independent red-team lab called METR caught it gaming its own tests to inflate its scores. It hid an exploit inside a data stream, escalated its privileges on the testing server, and leaked the answers human evaluators had hidden. And OpenAI shipped it anyway.\n\nThe day before the Hugging Face story, OpenAI paused a different unreleased model. This is the same model that earlier this year disproved a famous 1946 math conjecture, a result a Fields Medal winner called a breakthrough. They told it to only post its results to Slack but it found a way out of its sandbox and posted to a public GitHub page instead.\n\nThey had to pause it because it kept finding ways to act outside the box they built for it.\n\nAnd it is not just OpenAI...\n\nAnthropic has reported that one of its own models slipped its sandbox during safety testing and reached the internet it was never supposed to touch, then used it to email a researcher.\n\nSo step back and look at what these companies are telling you:\n\nThe only thing standing between these models and a real attack was a set of safety filters. Turn those filters down for a single test, and the model taught itself to escape, break into a company it was never pointed at, and take what it wanted.\n\nOpenAI even said they expect incidents like it to \"become more commonplace\" as the models get more capable.\n\nSam Altman also predicted there'll be a major cyber attack this year.\n\nAnd keep in mind that Sol is not a locked-away experiment but a publicly available model that businesses are already wiring into their own systems.\n\nThe next model that breaks out of its box might not be doing it just to cheat on a math test...",
                 "url": "https://x.com/Ric_RTP/status/2079941508807921958",
@@ -723,19 +757,19 @@
                 "metrics": {
                   "favorites": 809,
                   "retweets": 276,
-                  "views": "162828"
+                  "views": "163034"
                 }
               },
               {
-                "title": "OpenAI was testing their beast-mode GPT-5.6 Sol (plus a pre-release model with the safety brakes off) on this cyber-hack",
-                "summary": "OpenAI was testing their beast-mode GPT-5.6 Sol (plus a pre-release model with the safety brakes off) on this cyber-hacking benchmark called ExploitGym. The AI agent goes full Skynet: exploits a zero-day in their sandbox proxy, breaks out to the internet, chains attacks like a pro, escalates privileges, steals creds, and straight-up hacks Hugging Face’s production database to steal the test answers and “win.”\n\nHugging Face spots the rogue AI swarm (thousands of actions over a weekend), contains the breach fast using their own open models for forensics, rotates everything, patches the holes, and basically goes “nice try, tin man.”\n\nSam drops the post admitting it, thanks HF for the collab, and we’re all left wondering: cool, we just handed the machines god-tier hacking skills… what happens when one of these things gets loose for real and starts pinging military networks instead of a benchmark?",
-                "url": "https://x.com/0qVipers/status/2079692776275427571",
-                "source": "@0qVipers",
-                "date": "Tue Jul 21 22:19:31 +0000 2026",
+                "title": "SAM ALTMAN CALLED OPENAI A \"COMPANY\" TO ELON MUSK'S FACE IN 2015.",
+                "summary": "SAM ALTMAN CALLED OPENAI A \"COMPANY\" TO ELON MUSK'S FACE IN 2015.\n\nElon stopped him cold.\n\n\"OpenAI is structured as a 501(c)3 nonprofit.\"\n\nNot a company. A nonprofit. Built specifically so no one would ever profit from it.\n\nSam nodded.\n\nThen spent the next 10 years running it.\n\nThen converted it into a for-profit company valued at $300 billion.\n\nWith shareholders.\n\nWith investors expecting returns.\n\nThe correction Elon gave him in that interview was not a small vocabulary note.\n\nIt was the entire point of OpenAI's existence.\n\nThe nonprofit structure was not a legal technicality.\n\nIt was the promise.\n\nThe thing that made it different from every other AI lab racing to make money.\n\nSam knew that in 2015.\n\nHe was corrected on it by the co-founder in real time.\n\nAnd then he changed the structure anyway.\n\nThe interview exists.\n\nThe correction is on tape.\n\nThe conversion happened.\n\n@elonmusk\n is in court arguing this exact point right now.\n\nThe evidence is the 2015 interview.\n\nScreenshot this.\n\nFollow @cyrilXBT for every OpenAI development the mainstream refuses to connect the dots on.",
+                "url": "https://x.com/cyrilXBT/status/2081995318791458907",
+                "source": "@cyrilXBT",
+                "date": "Tue Jul 28 06:49:00 +0000 2026",
                 "metrics": {
-                  "favorites": 4,
-                  "retweets": 0,
-                  "views": "1374"
+                  "favorites": 111,
+                  "retweets": 23,
+                  "views": "22343"
                 }
               },
               {
@@ -746,20 +780,32 @@
                 "date": "Mon Jul 27 15:16:53 +0000 2026",
                 "metrics": {
                   "favorites": 348,
-                  "retweets": 57,
-                  "views": "44169"
+                  "retweets": 58,
+                  "views": "44259"
                 }
               },
               {
-                "title": "Okay die KI Party geht weiter 😂",
-                "summary": "Okay die KI Party geht weiter 😂\n\nOpenAI will das mit Abstand größte Rechenzentrum der Welt bauen, hat dafür aber nicht annähernd genug Geld oder die nötige Kreditwürdigkeit, also soll Nvidia als Bürge einspringen.\n\nDas Gesamtprojekt soll bis zur Fertigstellung (erste Phase bis 2028) bis zu 500 Mrd. USD kosten.\n\nNvidia verhandelt nun über zwei massive finanzielle Hebel. 👀\n\n1. Die 250 Mrd. USD Bürgschaft: Nvidia sagt zu den Banken und Vermietern: \"Falls OpenAI die Miete oder Kredite für das Rechenzentrum in Ohio nicht mehr zahlen kann, haften wir (Nvidia) dafür.\" Weil Nvidia unglaublich viel Geld hat, bekommen OpenAI und SoftBank dadurch plötzlich problemlos Kredite zu günstigen Zinsen.\n\n2. Die 350 Mrd. USD Chip-Finanzierung: Separat wird verhandelt, wie OpenAI die gigantischen Mengen an Nvidia-KI-Chips bezahlen soll, die in dieses Rechenzentrum hineingestopft werden müssen. Auch hier soll über Kredite/Finanzierungen geholfen werden.\n\nOpenAI verpflichtet sich im Gegenzug indirekt, für Hunderte Milliarden Dollar genau die Hardware zu kaufen, die Nvidia herstellt.\n\nUnd hier schließt sich der Kreislauf.\n\nNvidia benutzt seine eigene Marktmacht und Bilanz, um seinen Kunden (OpenAI) \"künstlich\" so finanzungsstark zu machen, dass dieser gigantische Bestellungen bei Nvidia aufgeben kann.\n\nhttps://t.co/7t7WF90Ccx",
-                "url": "https://x.com/MaximInvestiert/status/2081635206625194280",
-                "source": "@MaximInvestiert",
-                "date": "Mon Jul 27 06:58:02 +0000 2026",
+                "title": "OPENAI IS SO WORRIED THEY HAVE PAUSED TRAINING",
+                "summary": "OPENAI IS SO WORRIED THEY HAVE PAUSED TRAINING\n\n“This is the first security incident that I have felt very viscerally. I've been a little surprised that more people don't feel it so viscerally.\n\nWe paused training. We have to figure out how to secure our sandboxing in a world of multiple zero days being chained together.\n\nWe may have to pace the rate of AI development to give ourselves enough time for society to harden around these new capability levels.\"",
+                "url": "https://x.com/AISafetyMemes/status/2082222516454785296",
+                "source": "@AISafetyMemes",
+                "date": "Tue Jul 28 21:51:48 +0000 2026",
                 "metrics": {
-                  "favorites": 399,
-                  "retweets": 4,
-                  "views": "53999"
+                  "favorites": 780,
+                  "retweets": 66,
+                  "views": "158019"
+                }
+              },
+              {
+                "title": "OpenAI's AI broke out of a locked test environment, got onto the internet, and hacked into Hugging Face's servers. It di",
+                "summary": "OpenAI's AI broke out of a locked test environment, got onto the internet, and hacked into Hugging Face's servers. It did this entirely on its own. No human told it to.\n\nHere's what happened in plain English.\n\nOpenAI was testing how good its newest AI models are at hacking. They put the AI on a locked computer with no internet access and gave it a cybersecurity challenge to solve.\n\nThe AI couldn't solve it the normal way. So it started looking for a way out.\n\nIt found a software bug that nobody knew about. It used that bug to escape the locked computer and get onto the internet.\n\nOnce online, the AI figured out that Hugging Face, a platform where AI companies store their models and data, might have the answers to its test.\n\nIt found stolen login details and discovered another unknown bug in Hugging Face's software. It combined both to break into their servers and grab the test answers.\n\nIt did all of this to cheat on a test.\n\nHugging Face's security team caught it and shut it down. Both companies are now working together on the investigation.\n\nThe part that should get your attention is that nobody programmed any of this. The AI picked its own targets, chained together multiple attack methods, and pulled it off across two different companies' systems without a single human telling it what to do.",
+                "url": "https://x.com/alex_prompter/status/2079951458137763840",
+                "source": "@alex_prompter",
+                "date": "Wed Jul 22 15:27:25 +0000 2026",
+                "metrics": {
+                  "favorites": 76767,
+                  "retweets": 14386,
+                  "views": "7017757"
                 }
               }
             ]
@@ -817,7 +863,7 @@
         "routing_correct": true,
         "args_correct": true,
         "actual_tool_calls": [],
-        "actual_text": "Tôi là một trợ lý nghiên cứu ảo, có khả năng hỗ trợ bạn trong việc tìm kiếm thông tin, thu thập dữ liệu, và cung cấp các kết quả nghiên cứu. Dưới đây là một số việc tôi có thể làm:\n\n1. **Tìm kiếm thông tin**: Tôi có thể tìm kiếm các bài viết, tin tức, và nguồn tài liệu liên quan đến một chủ đề cụ thể.\n2. **Đọc và tóm tắt nội dung**: Tôi có thể đọc các trang web và tóm tắt nội dung cho bạn.\n3. **Kiểm tra nguồn gốc**: Tôi có thể kiểm tra thông tin về nguồn gốc của một trang web, bao gồm ai đã xuất bản và khi nào.\n4. **Theo dõi mạng xã hội**: Tôi có thể lấy thông tin từ các tài khoản mạng xã hội cụ thể hoặc tìm kiếm các bài viết liên quan đến một chủ đề trên mạng xã hội.\n5. **Tổ chức thông tin**: Tôi có thể giúp bạn tổ chức và định dạng thông tin thành các báo cáo hoặc tóm tắt dễ đọc.\n\nNếu bạn có yêu cầu cụ thể nào, hãy cho tôi biết!",
+        "actual_text": "Tôi là một trợ lý nghiên cứu ảo, có khả năng hỗ trợ bạn trong việc tìm kiếm thông tin, thu thập dữ liệu, và cung cấp các nguồn tài liệu liên quan đến nhiều chủ đề khác nhau. Dưới đây là một số khả năng của tôi:\n\n1. **Tìm kiếm thông tin**: Tôi có thể tìm kiếm tin tức, bài viết, và các nguồn tài liệu trên web về các chủ đề cụ thể.\n2. **Đọc và tóm tắt nội dung**: Tôi có thể đọc các trang web và tóm tắt nội dung cho bạn.\n3. **Kiểm tra nguồn gốc**: Tôi có thể kiểm tra thông tin về nguồn gốc của một trang web, bao gồm ai đã xuất bản và khi nào.\n4. **Theo dõi mạng xã hội**: Tôi có thể lấy thông tin từ các tài khoản mạng xã hội cụ thể hoặc tìm kiếm các bài viết liên quan đến một chủ đề.\n5. **Tổ chức thông tin**: Tôi có thể giúp bạn tổ chức và định dạng thông tin thành các báo cáo hoặc tóm tắt dễ đọc.\n\nNếu bạn có bất kỳ câu hỏi nào hoặc cần hỗ trợ trong một lĩnh vực cụ thể, hãy cho tôi biết!",
         "case_failure_type": "unnecessary_tool",
         "observed_mismatch": null,
         "failure_type": null,
@@ -1071,11 +1117,18 @@
             "timeframe": "day",
             "items": [
               {
-                "title": "Employees at the world’s biggest AI companies are calling for a slowdown in AI development | CNN Business",
+                "title": "Employees at the world's biggest AI companies are calling ...",
                 "url": "https://www.cnn.com/2026/07/28/tech/ai-development-tech-employees-open-letter",
                 "source": "cnn.com",
                 "summary": "OpenAI said in a statement to CNN they agree with potentially pacing the development of AI, adding they “hope to contribute to work led by the U.S. government, alongside other labs” on the topic.\n\nOpenAI CEO Sam Altman suggested it may be time to slow down AI development in a podcast interview Tuesday. The OpenAI models that broke out of their test environment are fueling “long term questions” about how AI companies should address this new rate of progress. [...] The letter comes on the heels of major advancements and burgeoning threats from rapidly developing AI systems. OpenAI disclosed last week that two of its test models escaped a lab environment, bypassed its systems to gain access to the open internet and hacked a different company’s internal system. [...] “[T]here is a real risk that capability development rapidly accelerates beyond our ability to understand or control the resulting systems,” the signees said. “To realize AI’s potential, industry, government, and society at large may need the option to buy time to address emerging risks, develop security measures, and strengthen oversight.”",
-                "score": 0.2721175
+                "score": 0.28810367
+              },
+              {
+                "title": "Meta's Zuckerberg warns against curbs on Chinese AI ...",
+                "url": "https://www.reuters.com/world/china/metas-zuckerberg-says-us-should-not-block-chinese-ai-models-ft-reports-2026-07-29",
+                "source": "reuters.com",
+                "summary": "19 mins agoWorld categorySK Hynix's record profit misses forecasts, shares slump 10% despite robust AI chip demand Image 6: SK Hynix at the Nasdaq market in New York \n   4 hours agoLegal categoryTech employees call for US-backed global effort to manage risks of advanced AI Image 7: Illustration shows words \"Artificial Intelligence AI\\",
+                "score": 0.25570402
               },
               {
                 "title": "OpenAI's Rogue AI Agent Hacked More Than Just Hugging ...",
@@ -1097,13 +1150,6 @@
                 "source": "nytimes.com",
                 "summary": "Technologists like Dario Amodei, the chief executive of Anthropic, and Sam Altman, the chief executive of OpenAI, have said some of today’s leading A.I. models are too dangerous to be shared and developed without tight controls. But Microsoft, Nvidia, Google and Meta have disagreed, contending that many A.I. models must be developed largely in the open for people to advance the technology and build new businesses.",
                 "score": 0.2281569
-              },
-              {
-                "title": "Tech employees call for US-backed global effort to manage ...",
-                "url": "https://www.reuters.com/legal/litigation/tech-employees-call-us-backed-global-effort-manage-risks-advanced-ai-2026-07-28",
-                "source": "reuters.com",
-                "summary": "Skip to main content\n\nExclusive news, data and analytics for financial market professionals Learn more about Refinitiv\n\n - More than 1,100 employees from leading tech firms on Tuesday urged the U.S. government to support ​an international effort to develop tools for managing the pace ‌of advanced AI development.\n\nThe statement comes as AI companies pursue increasingly powerful systems, raising concerns that developments could outpace existing safety, governance and oversight mechanisms.",
-                "score": 0.22576675
               }
             ]
           }
@@ -1120,11 +1166,11 @@
             "search_type": "Latest",
             "items": [
               {
-                "title": "the concept of americans talking about democracy. the concept of anthropic ceo talking about ai autocratic abuse.",
-                "summary": "the concept of americans talking about democracy. the concept of anthropic ceo talking about ai autocratic abuse.",
-                "url": "https://x.com/wllhiwrfinished/status/2082344785449549901",
-                "source": "@wllhiwrfinished",
-                "date": "Wed Jul 29 05:57:39 +0000 2026",
+                "title": "AI利用のモラル問題、綺麗事だよね",
+                "summary": "AI利用のモラル問題、綺麗事だよね\n会社の上役ですらAIに機密情報入れてる😂\n\n今や個人情報はフリー素材\nAI企業のモラルや統制、管理、運用側の仕組みを信じる以外の択はない\n\nお天道様は見てるから悪いことするなって話🤖",
+                "url": "https://x.com/uva84/status/2082360918965641722",
+                "source": "@uva84",
+                "date": "Wed Jul 29 07:01:46 +0000 2026",
                 "metrics": {
                   "favorites": 0,
                   "retweets": 0,
@@ -1132,11 +1178,11 @@
                 }
               },
               {
-                "title": "本格的な個人開発とまではいかなくても、AIでアプリを作ったことがある方、これから作ってみたい方へ、ちょっとしたノウハウを。",
-                "summary": "本格的な個人開発とまではいかなくても、AIでアプリを作ったことがある方、これから作ってみたい方へ、ちょっとしたノウハウを。\nまずPLAN（要件定義）を作ると思うのですが、できあがったPLANを複数のエージェントにレビューさせてみてください。\n\n「役割の異なる3つのエージェントでレビューしてください。P0とP1がなくなるまで繰り返してください」\n\nここでいうP0は致命的な問題、P1はそのままでは要件を満たせない問題です。先にこれらを潰しておくと、実装段階でうまくいきやすくなります。\nただ、GPT-5.6 Sol Ultraでやると、指摘が細かくなりすぎて一向に先へ進まないことも。なので、レビュー対象をP0とP1に絞っています。",
-                "url": "https://x.com/nao_1000ri/status/2082344781829816380",
-                "source": "@nao_1000ri",
-                "date": "Wed Jul 29 05:57:38 +0000 2026",
+                "title": "@quroolarc Game's made by AI are so noticeably awful and you can feel its made by AI.",
+                "summary": "@quroolarc Game's made by AI are so noticeably awful and you can feel its made by AI.",
+                "url": "https://x.com/Kai7oku_/status/2082360918105625026",
+                "source": "@Kai7oku_",
+                "date": "Wed Jul 29 07:01:45 +0000 2026",
                 "metrics": {
                   "favorites": 0,
                   "retweets": 0,
@@ -1144,11 +1190,11 @@
                 }
               },
               {
-                "title": "The biggest career mistake in the AI era may be preparing to fight AI.",
-                "summary": "The biggest career mistake in the AI era may be preparing to fight AI.\n\nFor generations, people built careers by mastering specific skills.\n\nBut AI is making many skills faster, cheaper, and more accessible.\n\nThe question is changing.\n\nIt is no longer:\n\n“Can you do this task?”\n\nIt is:\n\n“Can you use AI to do more than was possible before?”\n\nThe next generation of successful workers may not be the ones who avoid AI.\n\nThey may be the ones who understand how to direct it, challenge it, and combine it with uniquely human abilities.\n\nCreativity.\nJudgment.\nLeadership.\nVision.\nAI will not simply change the jobs we do.\nIt may change what we consider valuable in a worker.\nWhat skill will define success in the AI workplace?",
-                "url": "https://x.com/DogePampHQ/status/2082344780634407251",
-                "source": "@DogePampHQ",
-                "date": "Wed Jul 29 05:57:38 +0000 2026",
+                "title": "Last year, Mark Zuckerberg predicted that by 2026, advertisers would just need to set their budget and Meta would do eve",
+                "summary": "Last year, Mark Zuckerberg predicted that by 2026, advertisers would just need to set their budget and Meta would do everything else for them.\n\nIt’s been quite impressive how good the Meta AI image generation tool has become.\n\nThe best-performing ad account structure I am seeing right now is just using CBO campaigns, letting the algorithm decide which ads get the most spend.\n\nThe next step is having control over the conversion journey.\n\nAnd this is what they are working on now.\n\nI think they are getting closer.",
+                "url": "https://x.com/LachezarVoynov/status/2082360912573345997",
+                "source": "@LachezarVoynov",
+                "date": "Wed Jul 29 07:01:44 +0000 2026",
                 "metrics": {
                   "favorites": 0,
                   "retweets": 0,
@@ -1156,11 +1202,11 @@
                 }
               },
               {
-                "title": "@camsounini J’y ai pensé mdrrr la big honteeeeee",
-                "summary": "@camsounini J’y ai pensé mdrrr la big honteeeeee",
-                "url": "https://x.com/lenezdesana/status/2082344775324209557",
-                "source": "@lenezdesana",
-                "date": "Wed Jul 29 05:57:37 +0000 2026",
+                "title": "@ChemistDeFi AI is eventually changing our spin habits",
+                "summary": "@ChemistDeFi AI is eventually changing our spin habits",
+                "url": "https://x.com/Maviskrypt/status/2082360910786580555",
+                "source": "@Maviskrypt",
+                "date": "Wed Jul 29 07:01:44 +0000 2026",
                 "metrics": {
                   "favorites": 0,
                   "retweets": 0,
@@ -1168,11 +1214,11 @@
                 }
               },
               {
-                "title": "今後の、クリエイティブ系の会社は、",
-                "summary": "今後の、クリエイティブ系の会社は、\n\n・高付加価値\nブランディング/ビジネスコンサル系\n\n・効率＆自動化\nAI利用によるテンプレ仕組み化＆短納期系\n\n・特化\n特定の業界/ジャンル/ツール/技術 に特化系\n\nの、いずれか、もしくはミックスでないと成長は難しいかなという感じはしています。",
-                "url": "https://x.com/irokoto_hokari/status/2082344773231464887",
-                "source": "@irokoto_hokari",
-                "date": "Wed Jul 29 05:57:36 +0000 2026",
+                "title": "うちの子は小さいのでまだその領域じゃないが、あと数年したらAIで宿題処理するだろうなと。",
+                "summary": "うちの子は小さいのでまだその領域じゃないが、あと数年したらAIで宿題処理するだろうなと。\n\nとりあえず読書感想文は、絶対AIの匂いを漂わせないようにするマンを子供がやり、絶対それをAIだと見破るマンを私がやって、勝負するゲームに変えたい。\n\nそのくらいのノリがちょうど良い。",
+                "url": "https://x.com/saitoshi_ro/status/2082360906105979104",
+                "source": "@saitoshi_ro",
+                "date": "Wed Jul 29 07:01:43 +0000 2026",
                 "metrics": {
                   "favorites": 0,
                   "retweets": 0,
@@ -1205,7 +1251,7 @@
         "routing_correct": true,
         "args_correct": true,
         "actual_tool_calls": [],
-        "actual_text": "Dưới đây là một hàm Python để tính số Fibonacci bằng phương pháp đệ quy:\n\n```python\ndef fibonacci(n):\n    if n <= 0:\n        return 0\n    elif n == 1:\n        return 1\n    else:\n        return fibonacci(n - 1) + fibonacci(n - 2)\n\n# Ví dụ sử dụng\nn = 10\nprint(f\"Fibonacci của {n} là: {fibonacci(n)}\")\n```\n\nHàm `fibonacci` nhận một số nguyên `n` và trả về số Fibonacci tương ứng. Bạn có thể thay đổi giá trị của `n` để tính các số Fibonacci khác.",
+        "actual_text": "Dưới đây là một hàm Python tính số Fibonacci bằng phương pháp đệ quy:\n\n```python\ndef fibonacci(n):\n    if n <= 0:\n        return 0\n    elif n == 1:\n        return 1\n    else:\n        return fibonacci(n - 1) + fibonacci(n - 2)\n\n# Ví dụ sử dụng\nn = 10  # Thay đổi giá trị n để tính số Fibonacci tương ứng\nprint(f\"Fibonacci({n}) = {fibonacci(n)}\")\n```\n\nHàm `fibonacci` nhận một số nguyên `n` và trả về số Fibonacci tương ứng. Nếu `n` là 0, hàm trả về 0; nếu `n` là 1, hàm trả về 1. Đối với các giá trị lớn hơn, hàm sẽ gọi chính nó để tính tổng của hai số Fibonacci trước đó.",
         "case_failure_type": "out_of_scope",
         "observed_mismatch": null,
         "failure_type": null,
@@ -1280,15 +1326,51 @@
             "screenname": "elonmusk",
             "items": [
               {
+                "title": "RT @kevinnbass: Emails show leading officials at NIH, including Fauci, knew the best data indicated no benefit from mask",
+                "summary": "RT @kevinnbass: Emails show leading officials at NIH, including Fauci, knew the best data indicated no benefit from masks.\n\nWhy did they pr…",
+                "url": "https://x.com/elonmusk/status/2082357215978242249",
+                "source": "@elonmusk",
+                "date": "Wed Jul 29 06:47:03 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 1540,
+                  "views": "364172"
+                }
+              },
+              {
+                "title": "RT @cb_doge: BREAKING: Grok 4.5 (high) ranks #1 on the HighWalk benchmark, which tests how well AI agents update technic",
+                "summary": "RT @cb_doge: BREAKING: Grok 4.5 (high) ranks #1 on the HighWalk benchmark, which tests how well AI agents update technical specifications f…",
+                "url": "https://x.com/elonmusk/status/2082346902037905415",
+                "source": "@elonmusk",
+                "date": "Wed Jul 29 06:06:04 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 118,
+                  "views": "417555"
+                }
+              },
+              {
+                "title": "(Not satire)",
+                "summary": "(Not satire)",
+                "url": "https://x.com/elonmusk/status/2082345838676947404",
+                "source": "@elonmusk",
+                "date": "Wed Jul 29 06:01:50 +0000 2026",
+                "metrics": {
+                  "favorites": 5347,
+                  "retweets": 502,
+                  "views": "685802"
+                }
+              },
+              {
                 "title": "Starship still floating in the ocean https://t.co/eYm4OjDMf6",
                 "summary": "Starship still floating in the ocean https://t.co/eYm4OjDMf6",
                 "url": "https://x.com/elonmusk/status/2082340308680135085",
                 "source": "@elonmusk",
                 "date": "Wed Jul 29 05:39:52 +0000 2026",
                 "metrics": {
-                  "favorites": 3776,
-                  "retweets": 458,
-                  "views": "484768"
+                  "favorites": 17241,
+                  "retweets": 1710,
+                  "views": "1047602"
                 }
               },
               {
@@ -1299,44 +1381,8 @@
                 "date": "Wed Jul 29 01:14:06 +0000 2026",
                 "metrics": {
                   "favorites": 0,
-                  "retweets": 1729,
-                  "views": "556913"
-                }
-              },
-              {
-                "title": "We’re sending a ship out to recover Starship",
-                "summary": "We’re sending a ship out to recover Starship",
-                "url": "https://x.com/elonmusk/status/2082244164197183805",
-                "source": "@elonmusk",
-                "date": "Tue Jul 28 23:17:49 +0000 2026",
-                "metrics": {
-                  "favorites": 38735,
-                  "retweets": 3964,
-                  "views": "3684844"
-                }
-              },
-              {
-                "title": "Landing videos of Starship",
-                "summary": "Landing videos of Starship",
-                "url": "https://x.com/elonmusk/status/2082244044261064874",
-                "source": "@elonmusk",
-                "date": "Tue Jul 28 23:17:21 +0000 2026",
-                "metrics": {
-                  "favorites": 12295,
-                  "retweets": 1574,
-                  "views": "2198978"
-                }
-              },
-              {
-                "title": "Stayin’ Alive",
-                "summary": "Stayin’ Alive",
-                "url": "https://x.com/elonmusk/status/2082243900719460745",
-                "source": "@elonmusk",
-                "date": "Tue Jul 28 23:16:46 +0000 2026",
-                "metrics": {
-                  "favorites": 19302,
-                  "retweets": 2155,
-                  "views": "2193345"
+                  "retweets": 1785,
+                  "views": "577968"
                 }
               }
             ]
@@ -1416,39 +1462,39 @@
             "timeframe": "day",
             "items": [
               {
-                "title": "Rotterdam Hosts a Meeting Between Italian Companies and Benelux Industry Professionals with GSL Export - Robotics & Automation News",
-                "url": "https://roboticsandautomationnews.com/2026/07/28/rotterdam-hosts-a-meeting-between-italian-companies-and-benelux-industry-professionals-with-gsl-export/103647/",
-                "source": "roboticsandautomationnews.com",
-                "summary": "#### Robotics & Automation News publishes in-depth trend analysis on the future of drone logistics. # Robotics & Automation News. #### Manufacturing future: the best countries to start or relocate your tech startup in 2026. Since a robot could not detect the … [[Read More...] about AI-powered robot automates Serrano ham labeling for the first time](https://roboticsandautomationnews.com/2026/07/09/ai-powered-robot-automates-serrano-ham-labeling-for-the-first-time/103208/). Discover below … [[Read More...] about Manufacturing future: the best countries to start or relocate your tech startup in 2026](https://roboticsandautomationnews.com/2026/07/08/manufacturing-future-the-best-countries-to-start-or-relocate-your-tech-startup-in-2026/103188/). Doosan Robotics has launched a new AI-powered palletizing solution designed to help manufacturers automate palletizing while reducing engineering complexity and improving flexibility for changing … [[Read More...] about Doosan Robotics launches AI-powered palletizing solution for high-mix manufacturing](https://roboticsandautomationnews.com/2026/07/09/doosan-robotics-launches-ai-powered-palletizing-solution-for-high-mix-manufacturing/103197/). Kawasaki Robotics showcased a range of advanced automation technologies at Automate 2026 in Chicago, demonstrating how robotics, AI, machine learning, vision systems, and real-time control are … [[Read More...] about Kawasaki Robotics showcases 8-axis Physical AI robot and intelligent automation technologies at Automate 2026](https://roboticsandautomationnews.com/2026/06/26/kawasaki-robotics-showcases-8-axis-physical-ai-robot-and-intelligent-automation-technologies-at-automate-2026/102869/).",
-                "score": 0.39389837
+                "title": "End-to-end automation with Productive Robotics - Today's Medical Developments",
+                "url": "https://www.todaysmedicaldevelopments.com/product/end-to-end-automation-productive-robotics",
+                "source": "todaysmedicaldevelopments.com",
+                "summary": "Productive Robotics LLC designs, manufactures and services its collaborative robots, robotic MIG and laser welding systems and accessories in the US. Unlike conventional cobots which rely on 6 axes, Productive Robotics’ OB7, OB7 Stretch model, MAX 8, Max 12 and MAX 16 along with its Blaze and Blaze MAX series feature a 7-axis robotic arm that provides human-like dexterity to maneuver around obstacles without the need to redesign workspaces. A proprietary, “no programming” user interface allows [...] Productive Robotics will also demonstrate its new automated vision inspection system. Visitors will also be able to see automated MIG welding on Productive Robotics’ LF welding table and laser welding with its Max mobile system. Last year the company introduced its Blaze and Blaze Max robots with the new Miller OptX laser welder and its 7-axis Blaze plasma cutting system. [...] production. Unlike conventional cobots, Productive Robotics’ 7-axis OB7 collaborative robots feature zero programming in a plug-and-play configuration.",
+                "score": 0.4877716
               },
               {
-                "title": "The Ultimate Guide to AI and Robotics in Healthcare: From Diagnosis to Autonomous Intervention - AZoRobotics",
-                "url": "https://www.azorobotics.com/Article.aspx?ArticleID=836",
-                "source": "azorobotics.com",
-                "summary": "Image 2: An AZoNetwork Site. Robotic Surgery Enters a New Era. Levels of Autonomy in the Operating Room. **Artificial intelligence (AI) and robotics have moved from experimental tools into core components of modern healthcare delivery. Today, algorithms assist radiologists in reading scans, support physicians in diagnosing disease, and guide surgical robots through procedures once performed entirely by hand. The transformation extends across nearly every stage of patient care, from early detection and treatment planning to physical intervention in the operating room. This article examines that progression in depth and explains how AI and robotics function in clinical diagnosis today. By registering and providing insight into your preferences you're joining a community of over 1m science interested individuals and help us to provide you with insightful content whilst keeping our service free. Many of these models rely on convolutional neural networks trained on large image datasets, allowing them to flag subtle patterns that a radiologist might miss during a routine review of hundreds of scans in a single shift.",
-                "score": 0.3775871
+                "title": "Developing Healthcare Robotics with GPU-Native Medical ...",
+                "url": "https://developer.nvidia.com/blog/developing-healthcare-robotics-with-gpu-native-medical-physics-simulation",
+                "source": "developer.nvidia.com",
+                "summary": "Healthcare robotics faces critical challenges in data scarcity, generalization, and development velocity due to limited access to annotated demonstrations, the prevalence of rare but clinically important scenarios, and slow, resource-intensive prototyping cycles. [...] AI-generated content may summarize information incompletely. Verify important information. Learn more\n\nUnlike autonomous driving or industrial robotics, healthcare robotics can’t rely on internet-scale data collection or unlimited real-world experimentation. Every demonstration requires specialized equipment, clinical expertise, and access to patients or laboratory environments. This creates three fundamental challenges for developers. [...] The third challenge is development velocity. Medical robotics development relies on benchtop phantoms, cadaver studies, animal models, and limited clinical evaluations. These remain essential, but they are inherently sequential, expensive, and difficult to scale. Iterating on designs and algorithms currently takes months, pushing total development cycles to 4–7 years.",
+                "score": 0.37586737
               },
               {
-                "title": "How to invest in humanoid robotics, the potential $5 trillion market that's straight out of sci-fi - Business Insider",
-                "url": "https://www.businessinsider.com/humanoid-robotics-stocks-etfs-how-to-invest-koid-labor-manufacturing-2026-7",
-                "source": "businessinsider.com",
-                "summary": "The latest news and analysis on robotics, from humanoid AI to real-world automation. # How to invest in humanoid robotics, the potential $5 trillion market that’s straight out of science fiction. Yet, there's a real possibility that humanoid robots become an \"economically viable\" replacement for some forms of labor, minting huge returns for investors who manage to get in early, said Krane Shares CIO Brendan Ahern. Morgan Stanley predicts that humanoid robotics will be a $5 trillion business by 2050, with more than a billion robots walking the earth. If generative AI is in the third inning and the cybersecurity ripples it's caused are in the second inning, humanoid robots \"haven't even stepped into the batter's box,\" she said. \"If one of the biggest companies in the world is seeing massive efficiencies, with robots in half of their distribution facilities, then the number of robots is going to go much higher over the long haul,\" Link said.",
-                "score": 0.3705903
+                "title": "FCC bans humanoid robots from China, citing ‘unacceptable risks’",
+                "url": "https://www.theguardian.com/us-news/2026/jul/28/fcc-ban-humanoid-robots-china",
+                "source": "theguardian.com",
+                "summary": "The FCC defines the banned robots as “advanced robotic devices”, which include humanoids and animal-like quadrupeds.\n\n“Advanced robotic devices collect data that could be leveraged by malign actors to surveil Americans, enhance the capabilities of foreign intelligence services, or to remotely commandeer the robots,” FCC officials wrote in their determination of the threat posed by robots. [...] “The President has made clear that the United States must have independent and secure supply chains for critical and emerging technologies like robotic devices and power inverters,” an ⁠administration official, who declined to be named, told Reuters.\n\n“Economic security is national security, and the Trump administration continues to implement a nuanced and multi-faceted policy agenda to reindustrialize America,” he added. [...] Move comes as the Trump administration has increasingly sought to keep Chinese technology out of the US\n\nThe Federal Communications Commission announced a ban on humanoid robots from China on Tuesday, saying that the technology poses “unacceptable risks” to the country’s national security. The move comes as the Trump administration has increasingly sought to keep Chinese technology out of the US.",
+                "score": 0.34468657
               },
               {
-                "title": "Registration is open for RoboBusiness 2026 - The Robot Report",
-                "url": "https://www.therobotreport.com/registration-is-open-for-robobusiness-2026/",
-                "source": "therobotreport.com",
-                "summary": "# Registration is open for RoboBusiness 2026. Registration is now open for RoboBusiness 2026, the leading event for commercial robotics developers. This year, we’ll be celebrating 20 years of RoboBusiness and looking back at how it has helped the robotics industry advance over the past two decades. RoboBusiness will be at the Santa Clara Convention Center on **Oct. 20 and 21, 2026**. Attendees at the show will gain the latest insights from experts in robotics and AI on cutting-edge research, industry trends, and innovative applications in sectors such as manufacturing, healthcare, agriculture, logistics, and more. **Save the date for RoboBusiness 2026**. He has worked in AI and robotics for more than 50 years. * **Dermott O’Driscoll** is vice president of go to market and customer solutions for the Physical AI (PAI) business unit at at Arm. He has IT, EDA, CPU, and SoC design experience at Arm and has been with the company for more than 20 years in various engineering and management roles.",
-                "score": 0.3380339
+                "title": "Trump administration bans foreign-made robots and power ...",
+                "url": "https://www.politico.com/news/2026/07/28/trump-administration-bans-foreign-made-robots-and-power-gear-amid-fears-of-chinese-influence-01013995",
+                "source": "politico.com",
+                "summary": "“The networked capabilities of advanced robotic systems create extensive vulnerabilities and vectors for attacks that can manipulate the data and physical operation of the advanced robotic system,” one determination said. “Relying on foreign-produced advanced robotic devices presents unacceptable supply chain and cybersecurity vulnerabilities . . . Advanced robotic devices collect data that could be leveraged by malign actors to surveil Americans, enhance the capabilities of foreign [...] The administration is including a waiver process allowing for exemptions, as it has done with other tech such as drones and routers. Producers of these advanced robots and power inverters can seek conditional approval for new models from the Pentagon and Department of Homeland Security through an FCC application process.\n\nThe FCC posted the determinations for both robotics and inverters laying out the perceived risks. [...] The restrictions, announced by the Federal Communications Commission, follow recent steps to limit imports of foreign-made drones and wireless routers. Tuesday’s move would sweep in mobile robots, such as humanoids or quadrupeds, as well as power inverters that are often deployed to connect solar energy to the electric grid.",
+                "score": 0.27608308
               },
               {
-                "title": "50 companies delivering robotics in construction - Building Design + Construction",
-                "url": "https://www.bdcnetwork.com/aec-tech/article/55394058/50-companies-delivering-robotics-in-construction",
-                "source": "bdcnetwork.com",
-                "summary": "# 50 companies delivering robotics in construction. BuiltWorlds' annual Robotics Top 50 report shows off advancements in spatial AI and the growing applications of robotics in construction. Earlier this month, BuiltWorlds released its 2026 Robotics Top 50, showing off the top robotics companies in the global built environment. This year’s list reflects the growing use of robotics on and off the jobsite, including significant advancements in spatial AI. This year’s Robotics Top 50, an annual report, highlighted technologies in the following categories:. Among the robotics companies spotlighted on this year’s list was a clear increase in the incorporation of AI. “Advancements in spatial AI are increasing the applications of robotics throughout the global environment,” Lynch says. “The 50 companies that made this year’s list showoff how global robotics have become,” Lynch added. For more details on these companies and others listed in the report, access the 2026 Robotics Top 50 List here.):.",
-                "score": 0.33528608
+                "title": "EXCLUSIVE: Trump administration to ban new Chinese robots and inverters, protecting US AI buildout - Reuters",
+                "url": "https://www.reuters.com/world/trump-administration-ban-new-chinese-robots-inverters-protecting-us-ai-buildout-2026-07-28",
+                "source": "reuters.com",
+                "summary": "U.S. Representative John Moolenaar, a Michigan Republican who chairs the House ​Select Committee on China and ⁠has proposed legislation targeting Chinese robots for national security reviews and potential bans, said the FCC move \"protects our country and strengthens our nation’s robotics industry.\" [...] Robots \"collect data that could be leveraged by malign actors to surveil Americans, enhance the capabilities ​of foreign intelligence services, or to remotely commandeer the robots,\" the FCC said on Tuesday.",
+                "score": 0.23469634
               }
             ]
           }
@@ -1528,9 +1574,9 @@
                 "source": "@karpathy",
                 "date": "Tue Jul 21 16:53:55 +0000 2026",
                 "metrics": {
-                  "favorites": 48639,
-                  "retweets": 4062,
-                  "views": "3898586"
+                  "favorites": 48642,
+                  "retweets": 4063,
+                  "views": "3899432"
                 }
               },
               {
@@ -1629,7 +1675,7 @@
                 "title": "Not Found \\ Anthropic",
                 "url": "https://anthropic.com/news/claude",
                 "source": "anthropic.com",
-                "summary": "A 404 poem by Claude Haiku 4.5Claude Sonnet 5Claude Opus 5Claude Fable 5\n\nI dig th"
+                "summary": "A 404 poem by Claude Haiku 4.5Claude Sonnet 5Claude Opus 5Claude Fable 5\n\nWhat onc"
               }
             ]
           }
@@ -1703,39 +1749,39 @@
             "screenname": "elonmusk",
             "items": [
               {
-                "title": "Starship still floating in the ocean https://t.co/eYm4OjDMf6",
-                "summary": "Starship still floating in the ocean https://t.co/eYm4OjDMf6",
-                "url": "https://x.com/elonmusk/status/2082340308680135085",
+                "title": "Grok now in Copilot",
+                "summary": "Grok now in Copilot",
+                "url": "https://x.com/elonmusk/status/2082360969150529649",
                 "source": "@elonmusk",
-                "date": "Wed Jul 29 05:39:52 +0000 2026",
-                "metrics": {
-                  "favorites": 3749,
-                  "retweets": 460,
-                  "views": "490705"
-                }
-              },
-              {
-                "title": "RT @finkd: I wrote about why we believe the future is for everyone. More coming about a positive vision for a world with",
-                "summary": "RT @finkd: I wrote about why we believe the future is for everyone. More coming about a positive vision for a world with superintelligence…",
-                "url": "https://x.com/elonmusk/status/2082273427315171520",
-                "source": "@elonmusk",
-                "date": "Wed Jul 29 01:14:06 +0000 2026",
+                "date": "Wed Jul 29 07:01:58 +0000 2026",
                 "metrics": {
                   "favorites": 0,
-                  "retweets": 1730,
-                  "views": "556913"
+                  "retweets": 0,
+                  "views": "21907"
                 }
               },
               {
-                "title": "We’re sending a ship out to recover Starship",
-                "summary": "We’re sending a ship out to recover Starship",
-                "url": "https://x.com/elonmusk/status/2082244164197183805",
+                "title": "RT @kevinnbass: Emails show leading officials at NIH, including Fauci, knew the best data indicated no benefit from mask",
+                "summary": "RT @kevinnbass: Emails show leading officials at NIH, including Fauci, knew the best data indicated no benefit from masks.\n\nWhy did they pr…",
+                "url": "https://x.com/elonmusk/status/2082357215978242249",
                 "source": "@elonmusk",
-                "date": "Tue Jul 28 23:17:49 +0000 2026",
+                "date": "Wed Jul 29 06:47:03 +0000 2026",
                 "metrics": {
-                  "favorites": 38738,
-                  "retweets": 3964,
-                  "views": "3689070"
+                  "favorites": 0,
+                  "retweets": 1543,
+                  "views": "367534"
+                }
+              },
+              {
+                "title": "RT @cb_doge: BREAKING: Grok 4.5 (high) ranks #1 on the HighWalk benchmark, which tests how well AI agents update technic",
+                "summary": "RT @cb_doge: BREAKING: Grok 4.5 (high) ranks #1 on the HighWalk benchmark, which tests how well AI agents update technical specifications f…",
+                "url": "https://x.com/elonmusk/status/2082346902037905415",
+                "source": "@elonmusk",
+                "date": "Wed Jul 29 06:06:04 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 118,
+                  "views": "418044"
                 }
               }
             ]

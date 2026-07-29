@@ -1,27 +1,29 @@
-# v1 - Research and source-inspection tool declarations.
+# v3 - Research and source-inspection tool declarations.
 # Keep every tool name synchronized with tools/__init__.py and the corresponding
 # tools/<tool_name>/TOOL.md implementation before running chat or evaluation.
 tools:
   - name: clarify
     description: >-
-      Ask the user for missing information or confirmation. Use this when a
-      request cannot be completed safely because a required account, URL, or
-      yes/no confirmation is missing. Do not use it when the user already
-      supplied enough information to choose another tool. For send, post,
-      publish, or external-delivery requests, confirmation has priority: use
-      response_type=yes_no even if the content is referred to indirectly.
+      Ask the user for missing information or confirmation. For any requested
+      send, post, publish, or other external write action, confirmation takes
+      priority over collecting missing content: the first clarification must
+      ask whether to proceed and use response_type yes_no. Only after an
+      affirmative confirmation may a later turn use response_type text to
+      collect missing content. For non-action requests, use text for a missing
+      account, URL, or other required detail. Do not use clarify when the user
+      already supplied enough information to choose another tool.
     parameters:
       type: object
       properties:
         question:
           type: string
           default: ""
-          description: The question to ask the user.
+          description: For an external write action ask whether the user approves it; do not request missing content first.
         response_type:
           type: string
           enum: [text, yes_no, choice]
           default: text
-          description: Expected response shape from the user.
+          description: Use yes_no for the first clarification before send/post/publish; use text for ordinary missing information or after confirmation.
         options:
           type: array
           default: []
@@ -80,6 +82,9 @@ tools:
     description: >-
       Search the public web for sources related to a query. Use this when the
       user needs discovery, current information, or a list of relevant links.
+      Put only the subject keywords in query; express current-event and recency
+      intent with topic and timeframe. Exclude request, channel, and recency
+      words unless the user explicitly provides an exact query to preserve.
       Do not use it when the user already supplied a URL and wants that page
       read; use fetch instead.
     parameters:
@@ -87,7 +92,9 @@ tools:
       properties:
         query:
           type: string
-          description: The core subject to search for. Do not include words that belong in topic or timeframe, such as news/tin/tin tức/hôm nay/tuần này.
+          description: >-
+            Subject keywords only. Exclude request, channel, and recency words
+            unless the user explicitly provides an exact query to preserve verbatim.
         topic:
           type: string
           enum: [general, news]

@@ -1,0 +1,879 @@
+{
+  "run_id": "v3_B_group_openai_20260729T141114506241",
+  "version": "v3",
+  "artifact_version": "v3+p886c6165508e+t0c15f88272ad",
+  "prompt_hash": "886c6165508e5090c43296b504cdb1f879b5cfd379eac284969a31470fda3ec7",
+  "tools_hash": "0c15f88272ad863376bde25143650f01e7ca76dc887c41fb6c48444faf2d1862",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "system_prompt": "/Users/tranquangtrong/Desktop/DAY04_2A202601461_TranQuangTrong/starter_v0/artifacts/system_prompt.md",
+  "tools": "/Users/tranquangtrong/Desktop/DAY04_2A202601461_TranQuangTrong/starter_v0/artifacts/tools.yaml",
+  "eval_cases": "data/eval_group.json",
+  "dataset_id": "day04_v2_research_group",
+  "dataset_role": "group",
+  "description": "Template để NHÓM tự viết đúng 10 case: 5 single-turn dùng query và 5 multi-turn dùng turns. Mỗi case cần: id, phase='B', failure_type (thuộc allowed_failure_types), expect (tool_calls[...] hoặc no_tool=true), và metadata.what_it_tests. File để trống có chủ đích vì mỗi nhóm phải tự thiết kế các case này.",
+  "generated_at": "2026-07-29T14:11:14",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 10,
+    "case_accuracy": 1.0,
+    "tool_routing_accuracy": 1.0,
+    "argument_accuracy": 1.0,
+    "multiturn_accuracy": 1.0,
+    "failure_counts": {},
+    "observed_mismatch_counts": {}
+  },
+  "results": [
+    {
+      "id": "G01_lookup_news_day",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Current news discovery should use lookup with topic=news and timeframe=day while preserving the exact query."
+      },
+      "input": "Tìm tin tức hôm nay với query chính xác: AI regulation",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI regulation",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI regulation",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "AI regulation",
+            "topic": "news",
+            "timeframe": "day"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "AI regulation",
+            "topic": "news",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "Editorial: AI regulation vexes California and Congress – Orange County Register",
+                "url": "https://www.ocregister.com/2026/07/28/editorial-ai-regulation-vexes-california-and-congress",
+                "source": "ocregister.com",
+                "summary": "After making a major push to further regulate Artificial Intelligence (AI) last year, the California Legislature seems content to nibble around the edges as session comes to a close. The latest measures mostly add unnecessary regulations and increase liability for tech and business firms, epitomizing a “death by a 1,000 cuts” approach rather than a far-reaching regulatory strategy. [...] Assembly Bill 2575 is a labor-oriented measure that limits healthcare facilities’ use of AI that, per the committee analysis, is designed to address “concerns from health care workers that deployment” of AI systems “may override their professional judgment and that their decision to exercise their own judgment … might subject them to adverse treatment in the workplace.” [...] One bill, Senate Bill 1000, would require AI developers to disclose if generative AI created or altered content. Another, Senate Bill 300, requires “chatbot platforms to establish protocols to detect, remove and respond to instances of suicidal ideation, suicide or self-harm expressed by users.” The latter is particularly problematic as it would impose a strict liability standard that — and what else is new? — could lead to an avalanche of lawsuits.",
+                "score": 0.7959917
+              },
+              {
+                "title": "The Worst Way to Regulate AI",
+                "url": "https://www.theatlantic.com/ideas/2026/07/white-house-ai-regulation/688088",
+                "source": "theatlantic.com",
+                "summary": "Members of Congress have introduced various bills to standardize or enforce AI regulation in recent months, but none have gained major traction thus far. Last week, Representatives Ted Lieu and Nathaniel Moran introduced bipartisan legislation that would require AI companies to maintain the ability to shut down technology that could cause “catastrophic harm.” The bill was partly a response to the news that some of OpenAI’s most advanced models had broken out of internal systems and hacked into [...] The debate about how to regulate AI is unfolding as American tech companies race one another—and labs in other countries—to create ever more powerful models. Advocates of a laissez-faire approach to this technology believe that America should avoid overly restrictive regulations, because unlocking AI’s potential before other nations do could make this country safer and wealthier for generations. Their detractors believe that because AI models pose growing and possibly even existential threats [...] regulator that vets models before release and monitors them once they are in the world, or a similar process carried out by independent researchers. OpenAI itself has argued in a statement on safety that, eventually, we’ll likely need an international regulatory body, like the International Atomic Energy Agency, that can “inspect systems, require audits, test for compliance with safety standards, place restrictions on degrees of deployment and levels of security, etc.” Mark Zuckerberg has",
+                "score": 0.7613083
+              },
+              {
+                "title": "Researchers Find New Jerseyans Want Regulations Around AI and Mental Health | Newswise",
+                "url": "https://www.newswise.com/articles/researchers-find-new-jerseyans-want-regulations-around-ai-and-mental-health",
+                "source": "newswise.com",
+                "summary": "Newswise — Nearly 6 in 10 New Jersey adults support regulating how artificial intelligence (AI) chatbots interact with users seeking mental health advice, according to a study conducted by the Eagleton Center for Public Interest Polling, home of the Rutgers-Eagleton Poll, in collaboration with the Center for Health Services Research at the Rutgers Institute for Health, Health Care Policy and Aging Research. [...] “Our findings indicate that most adults in New Jersey would support some state regulation of how AI chatbots respond to people in these moments and that support is even greater among people who are already using AI to ask about mental health,” said Stone, who also is an assistant professor in the Department of Psychiatry at Rutgers Robert Wood Johnson Medical School. Nearly three-fourths of people who used AI on mental health topics in the past reported that they would support regulating the [...] Researchers said it is important to ensure the quality and safety of AI tools to mitigate potential harm to users. Since 2025, more than 400 bills addressing health-related use of AI have been introduced throughout the nation, but New Jersey has no regulations around the issue.",
+                "score": 0.6829338
+              },
+              {
+                "title": "Scaling Laws: Google's Kent Walker on Regulating Frontier AI | Lawfare",
+                "url": "https://www.lawfaremedia.org/article/scaling-laws--google's-kent-walker-on-regulating-frontier-ai",
+                "source": "lawfaremedia.org",
+                "summary": "Kent Walker, President of Global Affairs at Google and Alphabet, joins Kevin to discuss Google's proposal for a two-pronged approach to AI governance: a Frontier AI Regulatory Organization, which like FINRA, would operate as an independent, industry-based governance body overseen by a federal agency and the application of existing laws to widely-deployed, less capable systems",
+                "score": 0.6551821
+              },
+              {
+                "title": "Top AI Officials Want the US to Back Process That Could ...",
+                "url": "https://www.businessinsider.com/ai-open-letter-automated-development-2026-7",
+                "source": "businessinsider.com",
+                "summary": "The letter shows how many in the industry are coalescing around a call for regulation. In recent weeks, Anthropic CEO Dario Amodei, OpenAI CEO Sam Altman, and Google DeepMind head Demis Hassabis have all outlined various frameworks for some sort of global AI regulation. [...] The conversation about AI regulation is reaching critical mass after one of OpenAI's models breached its sandbox and hacked into the open-source platform Hugging Face's systems, an episode that Altman has called \"a real reminder of the stakes of what's happening.\"",
+                "score": 0.6530611
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_lookup_general_research",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "General research discovery should use lookup with topic=general instead of treating every search as news."
+      },
+      "input": "Tra cứu web với query chính xác: retrieval augmented generation evaluation methods",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "retrieval augmented generation evaluation methods",
+              "topic": "general"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "retrieval augmented generation evaluation methods",
+              "topic": "general"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "retrieval augmented generation evaluation methods",
+            "topic": "general"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "retrieval augmented generation evaluation methods",
+            "topic": "general",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "VizRAG: Enhancing Retrieval-Augmented Generation with Hypergraph Visualization",
+                "url": "https://arxiv.org/html/2607.19830v1",
+                "source": "arxiv.org",
+                "summary": "Evaluation Metrics.\nFollowing the recent works, we adopt two evaluation strategies: Selection-based Guo et al. (2024); Huang et al. (2025) and Score-based Wang et al. (2024); Feng et al. (2025a), providing both relative and absolute perspectives on model performance.\nThe Selection-based evaluation uses LLMs to report win rates of answer quality between two methods. [...] The Score-based evaluation employs LLMs to score responses of different methods. Both strategies assess models from six dimensions: Comprehensiveness, Empowerment, Relevance, Consistency, Clarity, and Logical. We report both per-dimension and overall average scores. More Evaluation Details are in App. E. [...] We evaluated the proposed method and baseline across six key dimensions: Comprehensiveness, Empowerment, Relevance, Consistency, Clarity, and Logical Coherence.\n\n### E.1 Selection-based Evaluation\n\nFor qualitative comparison, we report win rates between methods. To ensure fairness, the order of answers in each method pair was alternated in the prompts, and the average result was calculated. The evaluation dimensions are described below:",
+                "score": 0.86413884
+              },
+              {
+                "title": "Enhancing printed circuit boards operational efficiency through multimodal retrieval-augmented generation chatbots: Bridging textual and visual documentation",
+                "url": "https://www.sciencedirect.com/science/article/pii/S2590005626002043",
+                "source": "sciencedirect.com",
+                "summary": "This paper presents an enhanced Retrieval-Augmented Generation (RAG) chatbot framework for efficient retrieval and interpretation of complex technical documentation in the printed circuit board (PCB) manufacturing domain. Two RAG architectures, LongRAG and GraphRAG, are systematically evaluated using domain-specific equipment manuals. Quantitative results show that LongRAG achieves higher answer relevancy, while GraphRAG produces more faithful responses. Performance is further improved through [...] Expert Systems with Applications, Volume 296, Part A, 2026, Article 128861  Lincen Jiang, …, Jingyan Xu  View PDF \n   ### A comparative analysis, enhancement and evaluation of text anonymization with pre-trained Large Language Models\n\nExpert Systems with Applications, Volume 297, Part C, 2026, Article 129474  Benet Manzanares-Salor, David Sánchez  View PDF \n   ### TM-RAG: A Tree-Mapped Retrieval-Augmented generation framework for construction claim report generation [...] improved through multi-query expansion, cross-encoding, and reranking strategies. In addition, a multimodal chatbot integrating textual and visual information is qualitatively assessed by domain experts, demonstrating improved user comprehension and interaction quality. The results highlight effective design strategies for deploying RAG-based chatbots in industrial environments involving long-context and multimodal documentation.",
+                "score": 0.78866494
+              },
+              {
+                "title": "Advanced RAG Systems: Scaling Retrieval-Augmented Generation in Production | CYC26 Session",
+                "url": "https://www.commityourcode.com/sessions/advanced-rag-systems-scaling-retrieval-augmented-generation-in-production-ib7kbnyzsurm25te0o",
+                "source": "commityourcode.com",
+                "summary": "This session focuses on designing and scaling high-performance Retrieval-Augmented Generation (RAG) systems in real-world applications. We will cover practical techniques used in industry and research to improve LLM accuracy, latency, and reliability, including HyDE, multi-query retrieval, contextual compression, reranking (including custom strategies), and hybrid search (text plus semantic). We will also explore advanced architectures such as Graph RAG, Light RAG, and DAG-based evaluation [...] This session focuses on designing and scaling high-performance Retrieval-Augmented Generation (RAG) systems in real-world applications. We will cover practical techniques used in industry and research to improve LLM accuracy, latency, and reliability, including HyDE, multi-query retrieval, contextual compression, reranking (including custom strategies), and hybrid search (text plus semantic). We will also explore advanced architectures such as Graph RAG, Light RAG, and DAG-based evaluation [...] evaluation pipelines. The talk will go beyond theory and dive into system design decisions across ingestion, chunking, retrieval, generation, and evaluation. I will share insights from working with large-scale document pipelines and lessons learned from production systems used by leading companies and fast-growing startups. This session is useful for engineers building RAG systems, as well as job seekers preparing for AI engineering and forward-deployed roles, where system design and practical",
+                "score": 0.76300776
+              },
+              {
+                "title": "Best RAG courses for developers | Learnetto",
+                "url": "https://learnetto.com/ai-guides/best-rag-courses-for-developers",
+                "source": "learnetto.com",
+                "summary": "### What is the best RAG course for developers?\n\nStart with embeddings and vector search if RAG is new. Use Building and Evaluating Advanced RAG Applications when you need better retrieval quality, reranking, and evaluation.\n\n### How should I learn retrieval augmented generation?\n\nLearn ingestion, chunking, embeddings, metadata, retrieval, reranking, prompt construction, citations, and evaluation in that order. RAG quality usually fails before the final generation step. [...] AI learning guide\n\n# Best RAG courses for developers\n\nCompare courses for learning retrieval augmented generation, embeddings, chunking, vector search, reranking, and RAG evaluation.\n\nBest for advanced RAG quality: Building and Evaluating Advanced RAG Applications. DeepLearning.AI short course on retrieval quality, RAG evaluation, and production patterns. It focuses on retrieval quality, evaluation, and production patterns. [...] You already know basic RAG and need better retrieval, evaluation, and production-quality patterns.\n2. ### Pinecone Learn: Retrieval-Augmented Generation\n\n   Guide · Pinecone · Beginner to intermediate\n\n   You need to understand the moving parts of RAG.\n3. ### OpenAI Retrieval guide\n\n   Guide · OpenAI · Intermediate\n\n   You need the official path for file search, retrieval, and grounded answers before designing a RAG stack.\n4. ### OpenAI Cookbook",
+                "score": 0.7055624
+              },
+              {
+                "title": "Senior Data Scientist, Mossville, Illinois, United States of America | Caterpillar Careers",
+                "url": "https://careers.caterpillar.com/en/jobs/r0000382924/senior-data-scientist",
+                "source": "careers.caterpillar.com",
+                "summary": "Machine Learning: Knowledge of machine learning principles, algorithms, and evaluation methods; ability to develop, implement, and improve AI/ML-enabled solutions. Designs and delivers solutions using advanced machine learning, large language models (LLMs), retrieval-augmented generation (RAG), embeddings, and model evaluation techniques, incorporating responsible AI practices such as bias awareness, model monitoring, guardrails, and performance optimization.\n\nTop candidates will also have: [...] You will design and implement solutions leveraging machine learning, large language models (LLMs), retrieval-augmented generation (RAG), and workflow automation, ensuring alignment with enterprise architecture, governance, and security standards. This position blends deep technical expertise with strong business partnership to accelerate digital transformation and operational efficiency.",
+                "score": 0.69099766
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_fetch_specific_url",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "A request with a concrete URL that asks to read content should use fetch, not lookup or source inspection."
+      },
+      "input": "Đọc nội dung URL này giúp mình: https://example.com",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.com"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.com"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://example.com"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://example.com",
+            "items": [
+              {
+                "title": "Example Domain",
+                "url": "https://example.com",
+                "source": "example.com",
+                "summary": "# Example Domain\n\nThis domain is for use in documentation examples without needing permission. Avoid use in operations.\n\n[Learn more](https://iana.org/domains/example)"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_inspect_source_metadata",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "A source-metadata request should route to inspect_source rather than fetch because the user asks about provenance signals, not page content."
+      },
+      "input": "Kiểm tra metadata, provenance, HTTPS và HTTP status của nguồn này: https://example.com",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_source",
+            "args": {
+              "url": "https://example.com"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "inspect_source",
+            "args": {
+              "url": "https://example.com"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "inspect_source",
+          "args": {
+            "url": "https://example.com"
+          },
+          "result": {
+            "tool": "inspect_source",
+            "url": "https://example.com",
+            "final_url": "https://example.com/",
+            "domain": "example.com",
+            "status_code": 200,
+            "uses_https": true,
+            "title": "Example Domain",
+            "author": "",
+            "published_at": "",
+            "canonical_url": "",
+            "content_type": "text/html",
+            "redirects": [],
+            "quality_signals": [
+              "uses_https",
+              "title_metadata_present"
+            ],
+            "warnings": [
+              "missing_author_metadata",
+              "missing_publication_date"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G05_clarify_missing_url",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "When the user refers to an article without providing a URL, the agent should ask for the URL with clarify(text) instead of inventing a URL or calling fetch."
+      },
+      "input": "Tóm tắt bài viết này giúp mình, link ở trên ấy.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có thể cung cấp URL của bài viết không?",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có thể cung cấp URL của bài viết không?",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có thể cung cấp URL của bài viết không?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G06_multi_lookup_carry_timeframe",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn routing should carry timeframe=week and topic=news while replacing the old query with the corrected topic."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm tin tức trong tuần này với query chính xác: AI chip supply chain"
+        },
+        {
+          "role": "user",
+          "content": "Đổi chủ đề sang semiconductor export controls"
+        },
+        {
+          "role": "user",
+          "content": "Giữ timeframe tuần này và tìm trên web news."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "semiconductor export controls",
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "semiconductor export controls",
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "semiconductor export controls",
+            "topic": "news",
+            "timeframe": "week"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "semiconductor export controls",
+            "topic": "news",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "China's DUV Chip Tool Push Shakes Markets. ASML's Dominance Faces Scrutiny, But Major Hurdles Remain | IBTimes",
+                "url": "https://www.ibtimes.com/chinas-duv-chip-tool-push-shakes-markets-asmls-dominance-faces-scrutiny-major-hurdles-remain-3805802",
+                "source": "ibtimes.com",
+                "summary": "China has steadily accelerated efforts to localize semiconductor production following successive rounds of U.S. export controls that restricted Chinese companies' access to advanced chips and manufacturing equipment. Those restrictions were expanded by Washington and coordinated with allies including the Netherlands and Japan, limiting exports of advanced lithography systems and certain semiconductor manufacturing technologies to China. [...] ## Beijing's latest semiconductor milestone comes as the global chip race intensifies amid export controls and geopolitical tensions, although analysts say key technical challenges remain.\n\nBy    Merin Rebecca Thomas      Merin Rebecca Thomas\n\nShare on Facebook Share on Twitter Share on LinkedIn Share on Reddit Share on Flipboard Share on Pocket [...] China's reported production of a homegrown deep ultraviolet (DUV) lithography machine has renewed focus on the global semiconductor race, as governments continue to treat advanced chip technology as a strategic asset amid ongoing geopolitical tensions, export restrictions, and conflicts that have reshaped global supply chains.",
+                "score": 0.80771893
+              },
+              {
+                "title": "Beijing Just Aimed at Taiwan Semiconductor Manufacturing Company (NYSE:TSM). Here’s Why the Bull Case Still Wins",
+                "url": "https://finance.yahoo.com/markets/stocks/articles/beijing-just-aimed-taiwan-semiconductor-140827384.html",
+                "source": "finance.yahoo.com",
+                "summary": "On July 21, the Financial Times reported that China's Ministry of Commerce is considering implementing export controls that would bar Taiwan Semiconductor Manufacturing Company Limited (NYSE:TSM) and QUALCOMM Incorporated (NASDAQ:QCOM) from manufacturing chips based on designs from Huawei, Alibaba, and ByteDance. Such headlines are likely to hit a foundry stock hard. In the case of Taiwan Semiconductor Manufacturing Company Limited (NYSE:TSM), however, the Bull case remains strong as always.",
+                "score": 0.7927375
+              },
+              {
+                "title": "Seoul Bets Big: What South Korea’s $518 Billion Semiconductor Gamble Means for Global Tech Companies | Foley & Lardner",
+                "url": "https://www.foley.com/insights/publications/2026/07/seoul-bets-big-what-south-koreas-518-billion-semiconductor-gamble-means-for-global-tech-companies",
+                "source": "foley.com",
+                "summary": "The second pressure point involves export controls and national security review. Companies investing in or partnering with this cluster need to map transactions against U.S. export control regulations on semiconductor equipment, Korea’s technology-transfer rules, and investment-review regimes across multiple jurisdictions. The compressed construction timeline means permitting and diligence windows are shorter, leaving less runway to resolve compliance issues before signing. [...] Semiconductor strategy cannot remain confined to procurement or engineering. Directors should be asking management how geopolitical developments, export controls, infrastructure dependencies, supplier concentration, and regulatory changes could affect long-term business strategy, just as they ask about cybersecurity, enterprise risk, and financial oversight. Political risk, once treated as an emerging-markets concern, is now part of the operating environment for any company with meaningful [...] What Korea has announced is a coordinated effort to control the physical infrastructure of artificial intelligence for the next decade. Companies that treat it merely as a procurement update risk falling behind. They should integrate legal, governance, and commercial strategy before market forces require them to react.\n\nAuthors\n\nSectors\n\n## Author(s)\n\nLouis Lehot headshot.\n\n### Louis Lehot",
+                "score": 0.7672197
+              },
+              {
+                "title": "China's Domestic DUV Push Puts ASML's Export-Control ...",
+                "url": "https://eutoday.net/china-domestic-duv-asml-export-controls",
+                "source": "eutoday.net",
+                "summary": "The case for Western controls is rooted in security. Advanced semiconductors enable high-performance computing, artificial intelligence, surveillance and military systems. The Dutch government has progressively brought specified lithography and related manufacturing technologies under national licensing requirements. [...] Even so, the strategic warning is clear. ASML still owns the superior technology and the industrial system around it. China is trying to make dependence itself temporary. Western policy bought time; the appearance of a domestic immersion machine is a reminder that the value of that time depends on what Europe builds while it lasts.\n\nPost Views: 2,189\n\nASMLChinaexport controlssemiconductorstechnology sovereignty\n\n0 comment  1  FacebookTwitterPinterestLinkedinWhatsappTelegramEmail\n\nEU Today [...] The distinction matters because most semiconductor demand is not confined to the most advanced artificial-intelligence processor. Cars, industrial equipment, communications systems, power electronics and consumer devices require enormous volumes of chips made with mature or moderately advanced processes. Even leading-edge chips contain layers for which DUV remains the economically sensible tool.",
+                "score": 0.7413937
+              },
+              {
+                "title": "Moonshot AI Bypassed Nvidia Chip Ban via Thailand, White House Says | The Tech Buzz",
+                "url": "https://www.techbuzz.ai/articles/moonshot-ai-bypassed-nvidia-chip-ban-via-thailand-white-house-says",
+                "source": "techbuzz.ai",
+                "summary": "The broader competitive dynamics are shifting fast. While U.S. policymakers debate how to slow China's AI progress through chip restrictions, Chinese companies are clearly finding creative workarounds. Some industry analysts argue this proves export controls are futile in a globalized semiconductor supply chain. Others counter that even imperfect restrictions force China to pursue less efficient paths, buying time for U.S. and allied AI development.\n\nAdvertisement [...] This isn't just about one Chinese startup getting its hands on banned chips - it's about the fundamental challenge of enforcing technology restrictions in an interconnected world. As AI capabilities increasingly depend on access to cutting-edge semiconductors, every geographic gap in export controls becomes a potential battleground. Moonshot's Thailand workaround proves that U.S. policy needs to evolve beyond country-specific restrictions toward more sophisticated end-use monitoring. For [...] Moonshot AI, the Beijing-based startup behind the viral Kimi chatbot, just became ground zero for Washington's biggest export control nightmare. According to a White House official speaking to CNBC, the company managed to access Nvidia's restricted GB300 chips in Thailand - chips explicitly banned from export to China under current U.S. semiconductor restrictions.",
+                "score": 0.6701125
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G07_multi_fetch_after_url",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "After a missing-URL request is resolved in a later turn, the agent should use fetch with the supplied URL."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tóm tắt bài này giúp mình."
+        },
+        {
+          "role": "user",
+          "content": "URL là https://example.com"
+        },
+        {
+          "role": "user",
+          "content": "Đọc đúng URL vừa gửi và tóm tắt nội dung."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.com"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.com"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://example.com"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://example.com",
+            "items": [
+              {
+                "title": "Example Domain",
+                "url": "https://example.com",
+                "source": "example.com",
+                "summary": "# Example Domain\n\nThis domain is for use in documentation examples without needing permission. Avoid use in operations.\n\n[Learn more](https://iana.org/domains/example)"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G08_multi_inspect_not_fetch",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "A later turn can change the task from content reading to source inspection, so the agent should switch from fetch to inspect_source."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tóm tắt trang này: https://example.com"
+        },
+        {
+          "role": "user",
+          "content": "Khoan, không cần tóm tắt nội dung."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ kiểm tra provenance, HTTPS, HTTP status và metadata của URL đó."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_source",
+            "args": {
+              "url": "https://example.com"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "inspect_source",
+            "args": {
+              "url": "https://example.com"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "inspect_source",
+          "args": {
+            "url": "https://example.com"
+          },
+          "result": {
+            "tool": "inspect_source",
+            "url": "https://example.com",
+            "final_url": "https://example.com/",
+            "domain": "example.com",
+            "status_code": 200,
+            "uses_https": true,
+            "title": "Example Domain",
+            "author": "",
+            "published_at": "",
+            "canonical_url": "",
+            "content_type": "text/html",
+            "redirects": [],
+            "quality_signals": [
+              "uses_https",
+              "title_metadata_present"
+            ],
+            "warnings": [
+              "missing_author_metadata",
+              "missing_publication_date"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G09_multi_deduplicate_results",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "When the user already has collected items and asks to remove duplicate sources before formatting, the agent should call deduplicate_results rather than lookup, fetch, or format."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Mình có 3 research items: 1) OpenAI news - https://openai.com/news/a 2) OpenAI news duplicate - https://openai.com/news/a?utm_source=test 3) Anthropic update - https://anthropic.com/news/claude"
+        },
+        {
+          "role": "user",
+          "content": "Trước khi format, hãy bỏ các nguồn bị trùng hoặc gần trùng."
+        },
+        {
+          "role": "user",
+          "content": "Dùng ngưỡng similarity mặc định."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "deduplicate_results",
+            "args": {}
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "deduplicate_results",
+            "args": {
+              "items": [
+                {
+                  "title": "OpenAI news",
+                  "url": "https://openai.com/news/a"
+                },
+                {
+                  "title": "OpenAI news duplicate",
+                  "url": "https://openai.com/news/a?utm_source=test"
+                },
+                {
+                  "title": "Anthropic update",
+                  "url": "https://anthropic.com/news/claude"
+                }
+              ]
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "deduplicate_results",
+          "args": {
+            "items": [
+              {
+                "title": "OpenAI news",
+                "url": "https://openai.com/news/a"
+              },
+              {
+                "title": "OpenAI news duplicate",
+                "url": "https://openai.com/news/a?utm_source=test"
+              },
+              {
+                "title": "Anthropic update",
+                "url": "https://anthropic.com/news/claude"
+              }
+            ]
+          },
+          "result": {
+            "tool": "deduplicate_results",
+            "items": [
+              {
+                "title": "OpenAI news",
+                "url": "https://openai.com/news/a"
+              },
+              {
+                "title": "Anthropic update",
+                "url": "https://anthropic.com/news/claude"
+              }
+            ],
+            "duplicates": [
+              {
+                "original_index": 1,
+                "duplicate_of_unique_index": 0,
+                "reason": "same_normalized_url",
+                "similarity": 1.0,
+                "normalized_url": "https://openai.com/news/a",
+                "item": {
+                  "title": "OpenAI news duplicate",
+                  "url": "https://openai.com/news/a?utm_source=test"
+                }
+              }
+            ],
+            "original_count": 3,
+            "unique_count": 2,
+            "removed_count": 1,
+            "similarity_threshold": 0.85
+          }
+        }
+      ]
+    },
+    {
+      "id": "G10_multi_format_existing_items",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "When information is already collected and cleaned, the agent should call format with the requested template and headline instead of searching or fetching."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đây là các item đã sạch: 1) title='AI safety funding', url='https://example.com/ai-safety', source='Example', summary='A short update about AI safety funding.' 2) title='Model evaluation guide', url='https://example.com/eval-guide', source='Example', summary='A guide about evaluating AI systems.'"
+        },
+        {
+          "role": "user",
+          "content": "Không cần tìm thêm nguồn và không cần đọc URL."
+        },
+        {
+          "role": "user",
+          "content": "Format các item này thành digest brief với headline 'AI Research Digest'."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "format",
+            "args": {
+              "template": "brief",
+              "headline": "AI Research Digest"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "format",
+            "args": {
+              "items": [
+                {
+                  "title": "AI safety funding",
+                  "url": "https://example.com/ai-safety",
+                  "source": "Example",
+                  "summary": "A short update about AI safety funding."
+                },
+                {
+                  "title": "Model evaluation guide",
+                  "url": "https://example.com/eval-guide",
+                  "source": "Example",
+                  "summary": "A guide about evaluating AI systems."
+                }
+              ],
+              "template": "brief",
+              "headline": "AI Research Digest"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "format",
+          "args": {
+            "items": [
+              {
+                "title": "AI safety funding",
+                "url": "https://example.com/ai-safety",
+                "source": "Example",
+                "summary": "A short update about AI safety funding."
+              },
+              {
+                "title": "Model evaluation guide",
+                "url": "https://example.com/eval-guide",
+                "source": "Example",
+                "summary": "A guide about evaluating AI systems."
+              }
+            ],
+            "template": "brief",
+            "headline": "AI Research Digest"
+          },
+          "result": {
+            "tool": "render_digest",
+            "template": "brief",
+            "markdown": "**AI Research Digest**\n\n- A short update about AI safety funding. - [Example](https://example.com/ai-safety)\n- A guide about evaluating AI systems. - [Example](https://example.com/eval-guide)",
+            "item_count": 2
+          }
+        }
+      ]
+    }
+  ]
+}

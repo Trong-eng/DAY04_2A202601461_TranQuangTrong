@@ -1,0 +1,28 @@
+{
+  "transcript_id": "v3_openrouter_20260729T145158383386",
+  "version": "v3",
+  "artifact_version": "v3+p886c6165508e+t0c15f88272ad",
+  "prompt_hash": "886c6165508e5090c43296b504cdb1f879b5cfd379eac284969a31470fda3ec7",
+  "tools_hash": "0c15f88272ad863376bde25143650f01e7ca76dc887c41fb6c48444faf2d1862",
+  "provider": "openrouter",
+  "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "system_prompt": "/Users/tranquangtrong/Desktop/DAY04_2A202601461_TranQuangTrong/starter_v0/artifacts/versions/v3/system_prompt.md",
+  "tools": "/Users/tranquangtrong/Desktop/DAY04_2A202601461_TranQuangTrong/starter_v0/artifacts/versions/v3/tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-07-29T14:51:58",
+  "updated_at": "2026-07-29T14:51:58",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-07-29T14:51:58",
+      "user": "bạn biết tổng thống Mỹ hiện tại là ai không ?",
+      "status": "provider_error",
+      "assistant_text": null,
+      "rounds": [],
+      "tool_events": [],
+      "error": "RuntimeError: Missing API key env var: OPENROUTER_API_KEY",
+      "ended_at": "2026-07-29T14:51:58"
+    }
+  ]
+}
