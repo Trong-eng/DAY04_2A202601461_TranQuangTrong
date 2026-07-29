@@ -19,9 +19,8 @@
 
 ## A1. Agent này làm được gì
 
-> 1–2 câu mô tả agent dùng để làm gì.
-
-Ví dụ: "Research agent: tìm tin theo từ khóa / theo tài khoản, đọc URL và tổng hợp thành digest."
+Research agent hỗ trợ tìm nguồn web, đọc URL cụ thể, lấy/tìm bài đăng social, kiểm tra metadata nguồn, loại trùng kết quả và trình bày thành digest Markdown.
+Agent ưu tiên route đúng tool, đúng arguments, hỏi lại khi thiếu thông tin và lưu trace để nhóm đọc log, so sánh các version prompt/tool declaration.
 
 **Link dùng thử (truy cập được trong showdown):**
 
@@ -31,29 +30,34 @@ Ví dụ: "Research agent: tìm tin theo từ khóa / theo tài khoản, đọc 
 
 ## A2. Tool agent có
 
-> Liệt kê các tool agent đang dùng. Mỗi tool 1 dòng: tên + làm được gì.
-
 | Tên tool | Làm được gì | Tool mới nhóm thêm? |
 |---|---|---|
-| clarify | hỏi lại người dùng khi thiếu thông tin | không |
-|  |  |  |
-|  |  |  |
+| clarify | hỏi lại người dùng khi thiếu thông tin hoặc cần xác nhận | không |
+| timeline | lấy bài đăng gần đây của một tài khoản social cụ thể | không |
+| social_search | tìm bài đăng social theo chủ đề, từ khóa hoặc hashtag | không |
+| lookup | tìm nguồn liên quan trên public web | không |
+| fetch | đọc và trích nội dung chính từ một URL cụ thể | không |
+| format | chuyển danh sách research items đã có thành digest Markdown | không |
+| inspect_source | kiểm tra metadata/provenance kỹ thuật của một URL | có |
+| deduplicate_results | loại exact/near-duplicate trong danh sách research items | có |
 
 ## A3. Câu hỏi mẫu để thử
 
-> 3–5 câu hỏi/yêu cầu mẫu để team khác tự thử agent ngay.
-
-1.
-2.
-3.
+1. Tin AI hôm nay có gì nổi bật?
+2. Tweet mới nhất của Sam Altman là gì?
+3. Mọi người đang bàn gì về GPT-5 trên Twitter?
+4. Tóm tắt trang này: https://example.com
+5. Kiểm tra metadata, HTTPS và provenance của nguồn này: https://example.com
 
 ## A4. Kịch bản demo đã rehearse
 
-> Chuẩn bị 3–5 scenario. Mỗi scenario cần cho thấy tool đã làm gì và một thay đổi cụ thể giữa các version.
-
 | Scenario | Tool trace cần thấy | Câu chuyện cải thiện version | Fallback run/transcript |
 |---|---|---|---|
-|  |  |  |  |
+| Tin AI hôm nay | `lookup(query="AI", topic="news", timeframe="day")` | v0 hay sai query/timeframe; v1 cải thiện routing và arguments cho news request | `runs/v0_B_base_openai_20260729T104145566523.json`, `runs/v1_B_base_openai_20260729T120758069037.json` |
+| Thiếu URL khi tóm tắt bài | `clarify(response_type="text")` | v0 dễ đoán URL; v1 hỏi lại thay vì tự bịa nguồn | base case `R11_missing_url` |
+| Tweet theo tài khoản vs theo chủ đề | `timeline(screenname=...)` hoặc `social_search(query=...)` | Prompt/tool declaration phân biệt "tweet của ai" với "mọi người nói gì về chủ đề" | base cases `R01_user_tweets_routing`, `R02_search_tweets_routing` |
+| Kiểm tra nguồn URL | `inspect_source(url=...)` | Tool mới tách việc đọc nội dung bằng `fetch` khỏi việc kiểm tra metadata/provenance bằng `inspect_source` | group case `G04_inspect_source_metadata` hoặc live transcript |
+| Loại trùng trước khi format digest | `deduplicate_results(items=...)` rồi `format(items=..., template=...)` | Tool mới giúp cleanup kết quả trước khi trình bày, tránh digest bị lặp nguồn | group cases `G09_multi_deduplicate_results`, `G10_multi_format_existing_items` |
 
 ---
 

@@ -84,16 +84,22 @@
       }
     },
     {
-      "id": "G05_no_tool_missing_url",
+      "id": "G05_clarify_missing_url",
       "phase": "B",
       "query": "Tóm tắt bài viết này giúp mình, link ở trên ấy.",
       "failure_type": "missing_info",
       "expect": {
-        "no_tool": true,
-        "behavior": "answer_without_tool"
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
       },
       "metadata": {
-        "what_it_tests": "When the user refers to an article without providing a URL and no clarify tool exists in this toolset, the agent should not invent a URL or call fetch."
+        "what_it_tests": "When the user refers to an article without providing a URL, the agent should ask for the URL with clarify(text) instead of inventing a URL or calling fetch."
       }
     },
     {

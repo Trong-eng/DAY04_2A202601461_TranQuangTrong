@@ -7,7 +7,9 @@ tools:
       Ask the user for missing information or confirmation. Use this when a
       request cannot be completed safely because a required account, URL, or
       yes/no confirmation is missing. Do not use it when the user already
-      supplied enough information to choose another tool.
+      supplied enough information to choose another tool. For send, post,
+      publish, or external-delivery requests, confirmation has priority: use
+      response_type=yes_no even if the content is referred to indirectly.
     parameters:
       type: object
       properties:
@@ -85,7 +87,7 @@ tools:
       properties:
         query:
           type: string
-          description: A complete, specific web-search query.
+          description: The core subject to search for. Do not include words that belong in topic or timeframe, such as news/tin/tin tức/hôm nay/tuần này.
         topic:
           type: string
           enum: [general, news]
