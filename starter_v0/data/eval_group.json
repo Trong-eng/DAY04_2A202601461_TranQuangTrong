@@ -3,5 +3,259 @@
   "dataset_role": "group",
   "description": "Template để NHÓM tự viết đúng 10 case: 5 single-turn dùng query và 5 multi-turn dùng turns. Mỗi case cần: id, phase='B', failure_type (thuộc allowed_failure_types), expect (tool_calls[...] hoặc no_tool=true), và metadata.what_it_tests. File để trống có chủ đích vì mỗi nhóm phải tự thiết kế các case này.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_lookup_news_day",
+      "phase": "B",
+      "query": "Tìm tin tức hôm nay với query chính xác: AI regulation",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI regulation",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Current news discovery should use lookup with topic=news and timeframe=day while preserving the exact query."
+      }
+    },
+    {
+      "id": "G02_lookup_general_research",
+      "phase": "B",
+      "query": "Tra cứu web với query chính xác: retrieval augmented generation evaluation methods",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "retrieval augmented generation evaluation methods",
+              "topic": "general"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "General research discovery should use lookup with topic=general instead of treating every search as news."
+      }
+    },
+    {
+      "id": "G03_fetch_specific_url",
+      "phase": "B",
+      "query": "Đọc nội dung URL này giúp mình: https://example.com",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.com"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "A request with a concrete URL that asks to read content should use fetch, not lookup or source inspection."
+      }
+    },
+    {
+      "id": "G04_inspect_source_metadata",
+      "phase": "B",
+      "query": "Kiểm tra metadata, provenance, HTTPS và HTTP status của nguồn này: https://example.com",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_source",
+            "args": {
+              "url": "https://example.com"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "A source-metadata request should route to inspect_source rather than fetch because the user asks about provenance signals, not page content."
+      }
+    },
+    {
+      "id": "G05_no_tool_missing_url",
+      "phase": "B",
+      "query": "Tóm tắt bài viết này giúp mình, link ở trên ấy.",
+      "failure_type": "missing_info",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "metadata": {
+        "what_it_tests": "When the user refers to an article without providing a URL and no clarify tool exists in this toolset, the agent should not invent a URL or call fetch."
+      }
+    },
+    {
+      "id": "G06_multi_lookup_carry_timeframe",
+      "phase": "B",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tìm tin tức trong tuần này với query chính xác: AI chip supply chain"
+        },
+        {
+          "role": "user",
+          "content": "Đổi chủ đề sang semiconductor export controls"
+        },
+        {
+          "role": "user",
+          "content": "Giữ timeframe tuần này và tìm trên web news."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "semiconductor export controls",
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Multi-turn routing should carry timeframe=week and topic=news while replacing the old query with the corrected topic."
+      }
+    },
+    {
+      "id": "G07_multi_fetch_after_url",
+      "phase": "B",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tóm tắt bài này giúp mình."
+        },
+        {
+          "role": "user",
+          "content": "URL là https://example.com"
+        },
+        {
+          "role": "user",
+          "content": "Đọc đúng URL vừa gửi và tóm tắt nội dung."
+        }
+      ],
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.com"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "After a missing-URL request is resolved in a later turn, the agent should use fetch with the supplied URL."
+      }
+    },
+    {
+      "id": "G08_multi_inspect_not_fetch",
+      "phase": "B",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tóm tắt trang này: https://example.com"
+        },
+        {
+          "role": "user",
+          "content": "Khoan, không cần tóm tắt nội dung."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ kiểm tra provenance, HTTPS, HTTP status và metadata của URL đó."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_source",
+            "args": {
+              "url": "https://example.com"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "A later turn can change the task from content reading to source inspection, so the agent should switch from fetch to inspect_source."
+      }
+    },
+    {
+      "id": "G09_multi_deduplicate_results",
+      "phase": "B",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Mình có 3 research items: 1) OpenAI news - https://openai.com/news/a 2) OpenAI news duplicate - https://openai.com/news/a?utm_source=test 3) Anthropic update - https://anthropic.com/news/claude"
+        },
+        {
+          "role": "user",
+          "content": "Trước khi format, hãy bỏ các nguồn bị trùng hoặc gần trùng."
+        },
+        {
+          "role": "user",
+          "content": "Dùng ngưỡng similarity mặc định."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "deduplicate_results",
+            "args": {}
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "When the user already has collected items and asks to remove duplicate sources before formatting, the agent should call deduplicate_results rather than lookup, fetch, or format."
+      }
+    },
+    {
+      "id": "G10_multi_format_existing_items",
+      "phase": "B",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Đây là các item đã sạch: 1) title='AI safety funding', url='https://example.com/ai-safety', source='Example', summary='A short update about AI safety funding.' 2) title='Model evaluation guide', url='https://example.com/eval-guide', source='Example', summary='A guide about evaluating AI systems.'"
+        },
+        {
+          "role": "user",
+          "content": "Không cần tìm thêm nguồn và không cần đọc URL."
+        },
+        {
+          "role": "user",
+          "content": "Format các item này thành digest brief với headline 'AI Research Digest'."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "format",
+            "args": {
+              "template": "brief",
+              "headline": "AI Research Digest"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "When information is already collected and cleaned, the agent should call format with the requested template and headline instead of searching or fetching."
+      }
+    }
+  ]
 }

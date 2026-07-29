@@ -6,13 +6,12 @@
 
 ## Team
 
-- Team:
 - Members:
   - Nguyễn Quang Huy - 2A202601954
   - Trần Nguyễn Anh Minh - 2A202601475
   - Trần Quang Trọng - 2A202601461
   - Hoàng Danh Thái - 2A202601527
-- Provider/model:
+- Provider/model: gpt-4o-mini
 
 ---
 
