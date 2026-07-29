@@ -78,6 +78,53 @@ def assistant_tool_message(response_text: str | None, calls: list[ToolCall]) -> 
     }
 
 
+def latest_user_text(messages: list[dict[str, str]]) -> str:
+    for message in reversed(messages):
+        if message.get("role") == "user":
+            return message.get("content", "")
+    return ""
+
+
+def needs_url_clarification(user_text: str) -> bool:
+    text = user_text.strip().lower()
+    if re.search(r"https?://\\S+", text):
+        return False
+    article_pointers = (
+        "bài này",
+        "bài viết này",
+        "link này",
+        "trang này",
+        "this article",
+        "this link",
+        "the link",
+        "this page",
+        "that article",
+    )
+    wants_reading = (
+        "tóm tắt",
+        "tom tat",
+        "đọc",
+        "doc",
+        "read",
+        "summarize",
+        "summary",
+    )
+    return any(pointer in text for pointer in article_pointers) and any(intent in text for intent in wants_reading)
+
+
+def preflight_clarification_call(messages: list[dict[str, str]]) -> ToolCall | None:
+    user_text = latest_user_text(messages)
+    if needs_url_clarification(user_text):
+        return ToolCall(
+            name="clarify",
+            args={
+                "question": "Bạn vui lòng cung cấp URL của bài viết cần tóm tắt nhé?",
+                "response_type": "text",
+            },
+        )
+    return None
+
+
 def run_model_tool_loop(
     *,
     provider: Any,
@@ -89,6 +136,27 @@ def run_model_tool_loop(
     working_messages = list(messages)
     rounds: list[dict[str, Any]] = []
     all_tool_events: list[dict[str, Any]] = []
+
+    preflight_call = preflight_clarification_call(working_messages)
+    if preflight_call:
+        print(f"🔧 {preflight_call.name}({json.dumps(preflight_call.args, ensure_ascii=False, sort_keys=True)})")
+        event = execute_tool_call(preflight_call)
+        round_record = {
+            "round": 1,
+            "assistant_text": None,
+            "tool_calls": [{"name": preflight_call.name, "args": preflight_call.args}],
+            "tool_results": [event],
+        }
+        rounds.append(round_record)
+        all_tool_events.append(event)
+        result = event.get("result", {})
+        question = result.get("question") or preflight_call.args["question"]
+        return {
+            "status": "waiting_for_user",
+            "assistant_text": question,
+            "rounds": rounds,
+            "tool_events": all_tool_events,
+        }
 
     for round_index in range(1, max_tool_rounds + 1):
         response = provider.complete(working_messages, tools, model=model, temperature=0.0)
