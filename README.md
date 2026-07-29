@@ -28,7 +28,7 @@ Nhiệm vụ bắt buộc:
 - Có UI chạy được. Khuyến nghị Streamlit để làm nhanh, nhưng nhóm có thể dùng bất kỳ framework nào và tự chọn nền tảng deploy phù hợp.
 - Hoàn thành `artifacts/REPORT.md`: Phần A xong trước 11:30 để làm tài liệu phụ trợ khi demo; Phần B hoàn thiện sau để nộp bài.
 
-UI là deliverable core, không phải bonus. Starter không cung cấp `app.py`; nhóm tự tạo UI bằng framework đã chọn.
+UI là deliverable core, không phải bonus. Project hiện có `starter_v0/app.py`: một Streamlit UI tái sử dụng agent loop thật và đọc trực tiếp evidence đã lưu.
 
 Optional/advanced tools có sẵn (không tính là tool mới của team; giữ declaration vẫn có thể đổi routing):
 
@@ -47,6 +47,16 @@ UI tốt không chỉ cần "có chat". Mỗi demo nên nhìn được:
 - cùng một scenario demo được chạy qua nhiều prompt/tool version để thấy cải thiện rõ ràng.
 
 Nếu chọn Streamlit, cài và ghi `streamlit>=1.30.0` vào `requirements.txt`. Tạo `app.py` tái sử dụng `run_model_tool_loop` trong `chat.py`, hiển thị `rounds/tool_events`, và lưu transcript thay vì viết một agent loop khác. Chạy `streamlit run app.py`; PASS khi mở được `http://localhost:8501`. Framework khác dùng contract tương đương và entrypoint của nhóm.
+
+UI hiện tại đáp ứng contract này và có thêm Phòng bằng chứng để xem metric, hash, run, dấu vết tình huống, cùng một tình huống qua nhiều phiên bản. Các phiên bản chưa có run thật được hiển thị là đang chờ thay vì dùng dữ liệu giả. Chạy UI:
+
+```bash
+cd starter_v0
+source .venv/bin/activate
+python -m streamlit run app.py
+```
+
+Nếu chưa muốn gọi provider/tool thật, bấm **Tải demo ngoại tuyến** để review layout và trace bằng sample transcript có nhãn mock rõ ràng.
 
 ## Deploy để team khác test
 

@@ -5,5 +5,7 @@ google-genai>=0.8.0
 # Research tools:
 requests>=2.31.0
 PyYAML>=6.0
+# Required UI deliverable:
+streamlit>=1.30.0
 # Optional arXiv PDF extraction (`paper_text`):
 pypdf>=4.0.0
