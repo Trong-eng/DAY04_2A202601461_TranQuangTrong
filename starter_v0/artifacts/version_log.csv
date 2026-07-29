@@ -1,1 +1,2 @@
 version,author,changed_artifact,artifact_version,prompt_hash,tools_hash,reason,hypothesis,metric_name,metric_before,metric_after,run_file
+v0,Trần Quang Trọng,baseline,v0+pf0c107a9d7a1+t011c271ef0bb,f0c107a9d7a14032c948d642d7c36f2a85cb6d69a099530093a874c94d472446,011c271ef0bbad1e19a5d7b660b2ed481b7d72950f1faa8a0798c3bdd8784ee1,Initial baseline run with starter prompt and tool declarations,Starter prompt and vague tool descriptions are expected to cause routing argument clarification and boundary failures,case_accuracy,,0.65,runs/v0_B_base_openai_20260729T104145566523.json
