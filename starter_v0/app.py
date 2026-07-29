@@ -7,10 +7,12 @@ one agent execution contract.
 
 from __future__ import annotations
 
+import csv
 import html
 import inspect
 import json
 import os
+import re
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -37,6 +39,7 @@ ARTIFACTS_DIR = ROOT / "artifacts"
 RUNS_DIR = ROOT / "runs"
 TRANSCRIPTS_DIR = ROOT / "transcripts"
 SAMPLE_TRANSCRIPT = ROOT / "samples" / "transcripts" / "example_openrouter_20260101T030000000000.transcript.json"
+VERSION_LOG_PATH = ARTIFACTS_DIR / "version_log.csv"
 VERSION_OPTIONS = ("v0", "v1", "v2", "v3")
 
 PROVIDER_META = {
@@ -116,6 +119,10 @@ def available_snapshot(version: str) -> bool:
     return (snapshot_dir / "system_prompt.md").exists() and (snapshot_dir / "tools.yaml").exists()
 
 
+def latest_available_version() -> str:
+    return next((version for version in reversed(VERSION_OPTIONS) if available_snapshot(version)), "v0")
+
+
 def discover_runs() -> list[dict[str, Any]]:
     runs: list[dict[str, Any]] = []
     for path in sorted(RUNS_DIR.glob("*.json"), key=lambda item: item.stat().st_mtime, reverse=True):
@@ -164,6 +171,30 @@ def latest_runs_by_version(runs: list[dict[str, Any]]) -> dict[str, dict[str, An
         version = str(run.get("version", "unknown"))
         latest.setdefault(version, run)
     return latest
+
+
+def version_log_by_version() -> dict[str, dict[str, str]]:
+    if not VERSION_LOG_PATH.exists():
+        return {}
+    try:
+        with VERSION_LOG_PATH.open(encoding="utf-8", newline="") as handle:
+            rows = list(csv.DictReader(handle))
+    except (OSError, csv.Error):
+        return {}
+    return {str(row.get("version")): row for row in rows if row.get("version")}
+
+
+def documented_line_ending_match(
+    note: dict[str, str] | None,
+    active_prompt_hash: str,
+    active_tools_hash: str,
+) -> bool:
+    text = " ".join([str((note or {}).get("reason", "")), str((note or {}).get("hypothesis", ""))])
+    match = re.search(r"LF equivalents? (?:are|is) ([0-9a-f]{12,64}) and ([0-9a-f]{12,64})", text, re.IGNORECASE)
+    if not match:
+        return False
+    prompt_prefix, tools_prefix = match.groups()
+    return active_prompt_hash.startswith(prompt_prefix.lower()) and active_tools_hash.startswith(tools_prefix.lower())
 
 
 def percent(value: Any) -> str:
@@ -282,6 +313,12 @@ def reset_conversation() -> None:
         "demo_mode",
     ):
         st.session_state.pop(key, None)
+
+
+def switch_to_version(version: str) -> None:
+    reset_conversation()
+    st.session_state["version_choice"] = version
+    st.session_state["snapshot_choice"] = available_snapshot(version)
 
 
 def ensure_session(config_key: str) -> None:
@@ -461,9 +498,17 @@ def inject_css() -> None:
 
         .version-strip { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.75rem; margin:.9rem 0 1.4rem; }
         .version-slot { border-top:2px solid var(--ink); padding:.7rem 0; min-height:92px; }
+        .version-slot.selected { border-color:var(--accent); }
         .version-slot.pending { border-top-style:dotted; border-color:var(--muted); opacity:.62; }
+        .version-name-row { display:flex; justify-content:space-between; align-items:baseline; gap:.5rem; }
         .version-name { font-family:var(--serif); font-size:24px; }
+        .version-badge { color:var(--accent); font-size:8px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
         .version-detail { color:var(--muted); font-size:11px; line-height:1.5; }
+        .version-delta { color:var(--sage); font-size:10px; margin-top:.25rem; }
+        .version-note { border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:1rem 0; margin:.5rem 0 1.25rem; }
+        .version-note-kicker { color:var(--accent); font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+        .version-note-title { font-family:var(--serif); font-size:20px; margin:.28rem 0 .45rem; }
+        .version-note-copy { color:var(--muted); font-size:12px; line-height:1.6; max-width:920px; }
 
         .tool-shelf { display:flex; flex-wrap:wrap; gap:.35rem; margin:.45rem 0 1rem; }
         .tool-token { border:1px solid var(--line); border-radius:999px; padding:.23rem .48rem; font-size:9px; color:var(--muted); }
@@ -563,11 +608,23 @@ def render_sidebar(
         format_func=lambda value: PROVIDER_META[value]["label"],
         key="provider_choice",
     )
-    default_version = "v1" if available_snapshot("v1") else "v0"
+    latest_version = latest_available_version()
+    latest_by_version = latest_runs_by_version(runs)
+    default_version = latest_version
     st.session_state.setdefault("version_choice", default_version)
     version = st.sidebar.selectbox(
         "Phiên bản artifact",
         VERSION_OPTIONS,
+        format_func=lambda value: " · ".join(
+            part
+            for part in (
+                value,
+                percent((latest_by_version.get(value, {}).get("summary", {}) or {}).get("case_accuracy"))
+                if value in latest_by_version else None,
+                "mới nhất" if value == latest_version else None,
+            )
+            if part
+        ),
         key="version_choice",
     )
     snapshot_exists = available_snapshot(version)
@@ -581,6 +638,16 @@ def render_sidebar(
         help="Dùng artifacts/versions/<version> khi snapshot tương ứng tồn tại.",
         key="snapshot_choice",
     )
+    if version != latest_version:
+        st.sidebar.button(
+            f"Dùng {latest_version} mới nhất",
+            width="stretch",
+            key="switch_latest_version",
+            on_click=switch_to_version,
+            args=(latest_version,),
+        )
+    else:
+        st.sidebar.caption(f"Đang dùng snapshot mới nhất · {latest_version}")
     prompt_path, tools_path, artifact_source = artifact_paths(version, use_snapshot)
 
     st.session_state.setdefault("model_override", "")
@@ -919,21 +986,39 @@ def render_tool_catalog(tools_path: Path) -> None:
     st.markdown(f'<div class="tool-catalog">{"".join(rows)}</div>', unsafe_allow_html=True)
 
 
-def render_version_strip(runs: list[dict[str, Any]]) -> None:
+def render_version_strip(runs: list[dict[str, Any]], selected_version: str) -> None:
     latest = latest_runs_by_version(runs)
+    newest_version = latest_available_version()
     slots = []
-    for version in ("v0", "v1", "v2", "v3"):
+    previous_score: float | None = None
+    for version in VERSION_OPTIONS:
         run = latest.get(version)
+        classes = ["version-slot"]
+        if version == selected_version:
+            classes.append("selected")
         if run:
             summary = run.get("summary", {})
+            score = summary.get("case_accuracy")
+            delta = None
+            if isinstance(score, (int, float)) and previous_score is not None:
+                delta = (score - previous_score) * 100
+            if isinstance(score, (int, float)):
+                previous_score = score
+            badge = '<span class="version-badge">Mới nhất</span>' if version == newest_version else ""
+            delta_html = (
+                f'<div class="version-delta">{delta:+.0f} điểm so với phiên bản trước</div>'
+                if delta is not None else ""
+            )
             slots.append(
-                f'<div class="version-slot"><div class="version-name">{version}</div>'
+                f'<div class="{" ".join(classes)}"><div class="version-name-row">'
+                f'<div class="version-name">{version}</div>{badge}</div>'
                 f'<div class="version-detail">{percent(summary.get("case_accuracy"))} độ chính xác<br>'
-                f'{esc(run.get("provider", "—"))} · {esc(run.get("suite", "—"))}</div></div>'
+                f'{esc(run.get("provider", "—"))} · {esc(run.get("suite", "—"))}</div>{delta_html}</div>'
             )
         else:
+            classes.append("pending")
             slots.append(
-                f'<div class="version-slot pending"><div class="version-name">{version}</div>'
+                f'<div class="{" ".join(classes)}"><div class="version-name">{version}</div>'
                 '<div class="version-detail">Đang chờ run thật<br>Không dùng dữ liệu cải thiện giả</div></div>'
             )
     st.markdown(f"<div class='version-strip'>{''.join(slots)}</div>", unsafe_allow_html=True)
@@ -968,9 +1053,10 @@ def render_evidence_tab(
     active_prompt_hash: str,
     active_tools_hash: str,
 ) -> None:
+    version_notes = version_log_by_version()
     st.markdown("### Bằng chứng theo phiên bản")
     st.caption("Chỉ sử dụng run JSON thật. Phiên bản chưa chạy sẽ để trống cho tới thí nghiệm tối ưu tiếp theo.")
-    render_version_strip(runs)
+    render_version_strip(runs, selected_version)
 
     if not runs:
         render_metric_grid(None)
@@ -992,7 +1078,17 @@ def render_evidence_tab(
     if selected.get("version") == selected_version:
         prompt_matches = selected.get("prompt_hash") == active_prompt_hash
         tools_match = selected.get("tools_hash") == active_tools_hash
-        if not (prompt_matches and tools_match):
+        line_endings_only = documented_line_ending_match(
+            version_notes.get(selected_version),
+            active_prompt_hash,
+            active_tools_hash,
+        )
+        if not (prompt_matches and tools_match) and line_endings_only:
+            st.info(
+                f"Run {selected.get('run_id', selected_id)} khớp nội dung snapshot {selected_version} sau khi chuẩn hóa "
+                "xuống dòng LF/CRLF. Hash byte thô khác nhau do hệ điều hành, không phải do thay đổi prompt hoặc tool."
+            )
+        elif not (prompt_matches and tools_match):
             st.warning(
                 f"Run {selected.get('run_id', selected_id)} dùng artifact cũ và không khớp snapshot {selected_version} hiện tại. "
                 f"Hãy chạy lại eval {selected_version} trước khi dùng metric này làm bằng chứng cho phiên bản mới."
@@ -1004,6 +1100,31 @@ def render_evidence_tab(
     meta_cols[1].metric("Lỗi nhà cung cấp", summary.get("provider_error_cases", "—"))
     meta_cols[2].metric("Hash prompt", compact_hash(selected.get("prompt_hash")))
     meta_cols[3].metric("Hash công cụ", compact_hash(selected.get("tools_hash")))
+
+    selected_version_note = version_notes.get(str(selected.get("version")))
+    if selected_version_note:
+        metric_before = selected_version_note.get("metric_before", "")
+        metric_after = selected_version_note.get("metric_after", "")
+        reason = selected_version_note.get("reason", "Chưa có ghi chú thay đổi.")
+        reason_preview = reason.split(". ", 1)[0].rstrip(".") + "."
+        try:
+            improvement = f"{float(metric_before) * 100:.0f}% → {float(metric_after) * 100:.0f}%"
+        except (TypeError, ValueError):
+            improvement = percent(summary.get("case_accuracy"))
+        st.markdown(
+            f'<div class="version-note">'
+            f'<div class="version-note-kicker">Thay đổi ở {esc(selected.get("version", "—"))}</div>'
+            f'<div class="version-note-title">{esc(selected_version_note.get("changed_artifact", "Artifact"))} · {esc(improvement)}</div>'
+            f'<div class="version-note-copy">{esc(reason_preview)}</div>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
+        with st.expander(f"Giả thuyết và caveat của {selected.get('version', 'phiên bản')}"):
+            st.markdown(f"**Lý do thay đổi**  \n{reason}")
+            st.markdown(
+                f"**Giả thuyết và kết quả**  \n"
+                f"{selected_version_note.get('hypothesis') or 'Chưa có giả thuyết được ghi lại.'}"
+            )
 
     st.markdown("#### Cùng một tình huống qua nhiều phiên bản")
     case_ids = sorted(
